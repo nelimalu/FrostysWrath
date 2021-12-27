@@ -1,7 +1,8 @@
 import pygame
+import Player
 
-WIDTH = 1500
-HEIGHT = 750
+WIDTH = 1100
+HEIGHT = 650
 win = pygame.display.set_mode((WIDTH, HEIGHT))
 pygame.display.set_caption("Frosty's Wrath")
 
