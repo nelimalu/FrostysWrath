@@ -15,6 +15,8 @@ def update():
 
 def main():
     run = True
+    luka_is_dumb = True
+
     while run:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
