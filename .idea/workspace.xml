@@ -1,16 +1,25 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="8cd78957-0e30-48f2-b5f0-0b1c0b6aef5e" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
+    <list default="true" id="ac06a21b-cee8-494b-9131-d1e3af93e258" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/FrostysWrath.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/FrostysWrath.iml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_2021-12-27_6_35_p_m___Changes_.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_2021-12-27_6_35_p_m___Changes_.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Main.py" beforeDir="false" afterPath="$PROJECT_DIR$/Main.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Player.py" beforeDir="false" afterPath="$PROJECT_DIR$/Player.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Python Script" />
+      </list>
+    </option>
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
@@ -19,6 +28,7 @@
     <option name="stateVersion" value="1" />
   </component>
   <component name="ProjectId" id="22t7qsdRIjx08sxZZ949mgwmoB1" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
@@ -28,6 +38,7 @@
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$/../pygamespaceinvaders" />
+    <property name="settings.editor.selected.configurable" value="com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable" />
   </component>
   <component name="RunManager">
     <configuration name="Main" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
@@ -57,7 +68,22 @@
       </list>
     </recent_temporary>
   </component>
+  <component name="ServiceViewManager">
+    <option name="viewStates">
+      <list>
+        <serviceView>
+          <treeState>
+            <expand />
+            <select />
+          </treeState>
+        </serviceView>
+      </list>
+    </option>
+  </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="SvnConfiguration">
+    <configuration />
+  </component>
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
       <changelist id="8cd78957-0e30-48f2-b5f0-0b1c0b6aef5e" name="Changes" comment="" />
@@ -73,10 +99,34 @@
       <map>
         <entry key="MAIN">
           <value>
-            <State />
+            <State>
+              <option name="COLUMN_ORDER" />
+            </State>
           </value>
         </entry>
       </map>
     </option>
+  </component>
+  <component name="WindowStateProjectService">
+    <state width="1515" height="171" key="GridCell.Tab.0.bottom" timestamp="1640657211447">
+      <screen x="0" y="0" width="1536" height="824" />
+    </state>
+    <state width="1515" height="171" key="GridCell.Tab.0.bottom/0.0.1536.824@0.0.1536.824" timestamp="1640657211447" />
+    <state width="1515" height="171" key="GridCell.Tab.0.center" timestamp="1640657211447">
+      <screen x="0" y="0" width="1536" height="824" />
+    </state>
+    <state width="1515" height="171" key="GridCell.Tab.0.center/0.0.1536.824@0.0.1536.824" timestamp="1640657211447" />
+    <state width="1515" height="171" key="GridCell.Tab.0.left" timestamp="1640657211446">
+      <screen x="0" y="0" width="1536" height="824" />
+    </state>
+    <state width="1515" height="171" key="GridCell.Tab.0.left/0.0.1536.824@0.0.1536.824" timestamp="1640657211446" />
+    <state width="1515" height="171" key="GridCell.Tab.0.right" timestamp="1640657211447">
+      <screen x="0" y="0" width="1536" height="824" />
+    </state>
+    <state width="1515" height="171" key="GridCell.Tab.0.right/0.0.1536.824@0.0.1536.824" timestamp="1640657211447" />
+    <state x="277" y="54" key="SettingsEditor" timestamp="1640648989349">
+      <screen x="0" y="0" width="1536" height="824" />
+    </state>
+    <state x="277" y="54" key="SettingsEditor/0.0.1536.824@0.0.1536.824" timestamp="1640648989349" />
   </component>
 </project>
