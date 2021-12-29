@@ -2,7 +2,7 @@ import pygame
 import pygame.gfxdraw
 import math
 
-GRAVITY = 0.001
+GRAVITY = 0.01
 BOUNDS_MARGIN = 30
 
 

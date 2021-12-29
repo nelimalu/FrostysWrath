@@ -24,7 +24,7 @@ def update(player, fireballs, snowballs, campfire):
 
 
 def main():
-    player = Player.Player(100, 100, 1)
+    player = Player.Player(100, 100, 4)
     campfire = Campfire.Campfire(WIDTH // 2, HEIGHT // 2, 100)
 
     fireballs = []
@@ -32,7 +32,7 @@ def main():
 
     run = True
     while run:
-        # clock.tick(60)
+        clock.tick(60)
 
         keys = pygame.key.get_pressed()
         mousepos = pygame.mouse.get_pos()
@@ -41,7 +41,8 @@ def main():
             if event.type == pygame.QUIT:
                 run = False
             if event.type == pygame.MOUSEBUTTONDOWN:
-                fireballs.append(player.shoot(mousepos))
+                if event.button == pygame.BUTTON_LEFT:
+                    fireballs.append(player.shoot(mousepos))
 
         for x, projectile in enumerate([*fireballs, *snowballs]):
             projectile.move()
@@ -51,7 +52,7 @@ def main():
                 else:
                     fireballs.remove(projectile)
 
-        player.move(keys)
+        player.update(keys, campfire)
         update(player, fireballs, snowballs, campfire)
 
 
