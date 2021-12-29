@@ -84,6 +84,7 @@ def main():
                 hit.take_damage(fireball.damage)
                 if hit.is_dead():
                     snowmen.remove(hit)
+                    fireballs.remove(fireball)
             if fireball.is_out_of_bounds(WIDTH, HEIGHT):
                 fireballs.remove(fireball)
 
