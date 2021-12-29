@@ -2,6 +2,7 @@ import pygame
 import Player
 import Campfire
 import TitlePage
+import Helper
 
 WIDTH = 1100
 HEIGHT = 650
@@ -20,6 +21,12 @@ def update(player, fireballs, snowballs, campfire):
 
     campfire.draw(win)
 
+    for wood in campfire.wood:
+        wood.draw(win)
+        if Helper.collide(player.x, player.y, player.WIDTH, player.HEIGHT, wood.x, wood.y):
+            campfire.wood.remove(wood)
+            campfire.health += wood.HEAL_AMOUNT
+
     for x, projectile in enumerate([*fireballs, *snowballs]):
         projectile.draw(win)
 
@@ -37,7 +44,7 @@ def update(player, fireballs, snowballs, campfire):
 def main():
     global lost
 
-    player = Player.Player(100, 100, 4)
+    player = Player.Player(WIDTH // 2, HEIGHT // 2, 4)
     campfire = Campfire.Campfire(WIDTH // 2, HEIGHT // 2, 100)
 
     fireballs = []
@@ -58,7 +65,7 @@ def main():
                     fireball = player.shoot(mousepos)
                     if fireball is not None:
                         fireballs.append(fireball)
-                    # campfire.take_damage(5)
+                    campfire.take_damage(5)
 
         for x, projectile in enumerate([*fireballs, *snowballs]):
             projectile.move()
@@ -72,6 +79,7 @@ def main():
             lost = True
             run = False
 
+        campfire.spawn_wood()
         player.update(keys, campfire)
         update(player, fireballs, snowballs, campfire)
 

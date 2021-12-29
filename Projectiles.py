@@ -48,7 +48,7 @@ class Projectile:
         self.y += math.cos(self.angle) * self.speed
 
     def is_out_of_bounds(self, width, height):
-        return -BOUNDS_MARGIN < self.x > width + BOUNDS_MARGIN or -BOUNDS_MARGIN < self.y > height + BOUNDS_MARGIN
+        return -BOUNDS_MARGIN > self.x or self.x > width + BOUNDS_MARGIN or -BOUNDS_MARGIN > self.y or self.y > height + BOUNDS_MARGIN
 
 
 class Snowball(Projectile):
