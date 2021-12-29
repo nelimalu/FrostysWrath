@@ -4,6 +4,8 @@ import Projectiles
 import Helper
 import time
 
+# update
+
 
 class Player:
     FIRE_REGEN_RATE = 1  # regenerate 1 fireball per second

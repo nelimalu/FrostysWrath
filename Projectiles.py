@@ -6,6 +6,8 @@ import Helper
 GRAVITY = 0.01
 BOUNDS_MARGIN = 30
 
+# update
+
 
 class Projectile:
     def __init__(self, x, y, endpos, speed, damage, size):

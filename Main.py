@@ -6,6 +6,8 @@ import TitlePage
 import Helper
 import random
 
+# update
+
 WIDTH = 1100
 HEIGHT = 650
 win = pygame.display.set_mode((WIDTH, HEIGHT))

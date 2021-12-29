@@ -6,6 +6,8 @@ STAT_FONT = pygame.font.Font('assets/Snowby.ttf', 100)
 go_next = False
 run = True
 
+# update
+
 
 def draw_text(win, y, text, colour):
     text = STAT_FONT.render(text, True, colour)

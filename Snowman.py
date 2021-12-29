@@ -5,6 +5,8 @@ import Helper
 import Projectiles
 import time
 
+# update
+
 SNOWMAN_SPAWN_RATE = 0.01
 BORDER = (0, 0, 1100, 650)
 SAFE_DISTANCE = 30
