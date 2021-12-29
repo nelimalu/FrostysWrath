@@ -11,6 +11,7 @@ class Campfire:
     GAIN_DISTANCE = 50
     WOOD_SPAWN_RATE = 0.005
     BORDER = (125, 100, 1000, 550)
+    MAX_AMOUNT = 5
 
     def __init__(self, x, y, health):
         self.x = x
@@ -39,7 +40,7 @@ class Campfire:
         return x, y
 
     def spawn_wood(self):
-        if random.random() < self.WOOD_SPAWN_RATE:
+        if random.random() < self.WOOD_SPAWN_RATE and len(self.wood) < self.MAX_AMOUNT:
             self.wood.append(Wood(self.get_wood_location()))
 
     def take_damage(self, damage):

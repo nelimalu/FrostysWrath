@@ -5,6 +5,7 @@ import Snowman
 import TitlePage
 import Helper
 import random
+import EndPage
 
 # update
 
@@ -23,6 +24,9 @@ lost = False
 # FONTS
 pygame.font.init()
 SCORE_FONT = pygame.font.SysFont('comicsans', 60)
+FONT = pygame.font.SysFont('timesnewroman', 100)
+
+pygame.time.set_timer(pygame.USEREVENT, 200)
 
 score = 0
 
@@ -40,7 +44,6 @@ def update(player, fireballs, snowballs, campfire, snowmen):
             campfire.wood.remove(wood)
             if campfire.health < campfire.max_health:
                 campfire.health += wood.HEAL_AMOUNT
-                print("heal")
 
     for x, projectile in enumerate([*fireballs, *snowballs]):
         projectile.draw(win)
@@ -114,6 +117,10 @@ def main():
             lost = True
             run = False
 
+        if campfire.health <= 0:
+            lost = True
+            run = False
+
         if random.random() < Snowman.SNOWMAN_SPAWN_RATE:
             snowmen.append(Snowman.spawn_snowman(WIDTH, HEIGHT, campfire))
 
@@ -129,8 +136,21 @@ def main():
 
 
 if __name__ == "__main__":
+    message = EndPage.DynamicText(FONT, "Game Over...", (WIDTH//2-250, HEIGHT//2-200), autoreset=False)
     TitlePage.play(win)
     if TitlePage.go_next:
         main()
+    while lost:
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT: break
+            if event.type == pygame.USEREVENT: message.update()
+        else:
+            win.fill(pygame.color.Color('black'))
+            message.draw(win)
+            pygame.display.flip()
+            clock.tick(60)
+            continue
+        break
+
 
 pygame.quit()
