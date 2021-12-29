@@ -11,6 +11,7 @@ pygame.display.set_caption("Frosty's Wrath")
 
 background = pygame.image.load('assets/Background-snow.png')
 trees = pygame.image.load('assets/Background-trees.png')
+freezing = pygame.image.load('assets/Freezing.png').convert()
 
 clock = pygame.time.Clock()
 lost = False
@@ -34,8 +35,7 @@ def update(player, fireballs, snowballs, campfire):
 
     win.blit(trees, (0, 0))
 
-    player.draw_freezing(win, WIDTH, HEIGHT)
-
+    player.draw_freezing(win, freezing)
     player.draw_fireball_bar(win, WIDTH)
 
     pygame.display.flip()
