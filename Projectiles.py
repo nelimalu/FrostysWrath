@@ -38,9 +38,8 @@ class Snowball(Projectile):
         self.goal = goal
 
     def move(self):
-        self.airtime += 1
         self.x = self.x + math.sin(self.angle) * self.speed
-        self.y = self.y + (math.cos(self.angle) * self.speed) + (self.airtime * GRAVITY)  # fake arc for snowball
+        self.y = self.y + math.cos(self.angle) * self.speed
 
     def hit_goal(self):
         return Helper.get_distance(self.x, self.y, self.goal.x, self.goal.y) < self.speed + 1

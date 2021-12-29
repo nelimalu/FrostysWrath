@@ -30,13 +30,13 @@ pygame.time.set_timer(pygame.USEREVENT, 200)
 
 score = 0
 
+
 def update(player, fireballs, snowballs, campfire, snowmen):
     win.blit(background, (0, 0))
 
     campfire.draw(win)
 
     score_text = SCORE_FONT.render(str(score), 1, (255, 255, 0))
-
 
     for wood in campfire.wood:
         wood.draw(win)
@@ -113,11 +113,7 @@ def main():
             if snowball.is_out_of_bounds(WIDTH, HEIGHT):
                 snowballs.remove(snowball)
 
-        if player.time_freezing > 250:
-            lost = True
-            run = False
-
-        if campfire.health <= 0:
+        if campfire.health <= 0 or player.time_freezing > 250:
             lost = True
             run = False
 
