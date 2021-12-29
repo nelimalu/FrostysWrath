@@ -14,12 +14,16 @@ class Player:
         self.x = x
         self.y = y
         self.speed = speed
-        self.fireballs = 0  # how many fireballs the player has
+        self.fireballs = 3  # how many fireballs the player has
         self.freezing = False
         self.time_freezing = 0
+        self.max_fireball = 5
+        self.bar_length = 500
+        self.ratio = self.max_fireball/self.bar_length
 
     def draw(self, win, width, height):
         pygame.draw.rect(win, (0,0,0), (self.x - (self.WIDTH // 2), self.y - (self.HEIGHT // 2), self.WIDTH, self.HEIGHT))
+        self.draw_fireball_bar(win,width)
 
         if self.time_freezing > 0:
             pygame.gfxdraw.filled_polygon(win, ((0, 0), (0, height), (width, height), (width, 0)), (0, 191, 255, self.time_freezing))
@@ -47,6 +51,10 @@ class Player:
             self.x -= speed
         if keys[pygame.K_d] or keys[pygame.K_RIGHT]:
             self.x += speed
+
+    def draw_fireball_bar(self, win, width):
+        pygame.draw.rect(win, (255,165,0), (width//2-250, 600,self.fireballs/self.ratio,25))
+        pygame.draw.rect(win, (0,0,0), (width//2-250, 600,self.bar_length,25),5)
 
     def shoot(self, endpos):
         # run animation here
