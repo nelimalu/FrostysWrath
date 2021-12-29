@@ -20,6 +20,7 @@ class Player:
         self.freezing = False
         self.time_freezing = 0
         self.max_fireball = 5
+        self.time_gaining = 0
         self.bar_length = 500
         self.ratio = self.max_fireball/self.bar_length
 

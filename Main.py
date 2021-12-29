@@ -1,6 +1,7 @@
 import pygame
 import Player
 import Campfire
+import TitlePage
 
 WIDTH = 1100
 HEIGHT = 650
@@ -60,6 +61,8 @@ def main():
 
 
 if __name__ == "__main__":
-    main()
+    TitlePage.play(win)
+    if TitlePage.go_next:
+        main()
 
 pygame.quit()
