@@ -1,0 +1,197 @@
+Index: Main.py
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>import pygame\r\nimport Player\r\nimport Campfire\r\n\r\nWIDTH = 1100\r\nHEIGHT = 650\r\nwin = pygame.display.set_mode((WIDTH, HEIGHT))\r\npygame.display.set_caption(\"Frosty's Wrath\")\r\n\r\nclock = pygame.time.Clock()\r\n\r\n\r\ndef update(player, fireballs, snowballs, campfire):\r\n    win.fill((255,255,255))\r\n\r\n    campfire.draw(win)\r\n\r\n    for x, projectile in enumerate([*fireballs, *snowballs]):\r\n        projectile.draw(win)\r\n\r\n    player.draw(win, WIDTH, HEIGHT)\r\n\r\n    pygame.display.flip()\r\n\r\n\r\ndef main():\r\n    player = Player.Player(100, 100, 1)\r\n    campfire = Campfire.Campfire(WIDTH // 2, HEIGHT // 2, 100)\r\n\r\n    fireballs = []\r\n    snowballs = []\r\n\r\n    run = True\r\n    while run:\r\n        # clock.tick(60)\r\n\r\n        keys = pygame.key.get_pressed()\r\n        mousepos = pygame.mouse.get_pos()\r\n\r\n        for event in pygame.event.get():\r\n            if event.type == pygame.QUIT:\r\n                run = False\r\n            if event.type == pygame.MOUSEBUTTONDOWN:\r\n                fireballs.append(player.shoot(mousepos))\r\n\r\n        for x, projectile in enumerate([*fireballs, *snowballs]):\r\n            projectile.move()\r\n            if projectile.is_out_of_bounds(WIDTH, HEIGHT):\r\n                if x >= len(fireballs):\r\n                    snowballs.remove(projectile)\r\n                else:\r\n                    fireballs.remove(projectile)\r\n\r\n        player.move(keys)\r\n        update(player, fireballs, snowballs, campfire)\r\n\r\n\r\nif __name__ == \"__main__\":\r\n    main()\r\n\r\npygame.quit()\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/Main.py b/Main.py
+--- a/Main.py	
++++ b/Main.py	
+@@ -11,7 +11,7 @@
+ 
+ 
+ def update(player, fireballs, snowballs, campfire):
+-    win.fill((255,255,255))
++    win.fill((230, 230, 250))
+ 
+     campfire.draw(win)
+ 
+@@ -32,7 +32,7 @@
+ 
+     run = True
+     while run:
+-        # clock.tick(60)
++        clock.tick(60)
+ 
+         keys = pygame.key.get_pressed()
+         mousepos = pygame.mouse.get_pos()
+@@ -42,6 +42,8 @@
+                 run = False
+             if event.type == pygame.MOUSEBUTTONDOWN:
+                 fireballs.append(player.shoot(mousepos))
++                campfire.take_damage(5)
++
+ 
+         for x, projectile in enumerate([*fireballs, *snowballs]):
+             projectile.move()
+Index: Campfire.py
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>import pygame\r\n\r\n\r\nclass Campfire:\r\n    FREEZE_DISTANCE = 300\r\n\r\n    def __init__(self, x, y, health):\r\n        self.x = x\r\n        self.y = y\r\n        self.health = health\r\n\r\n    def draw(self, win):\r\n        pygame.draw.circle(win, (255,0,0), (self.x, self.y), self.FREEZE_DISTANCE, 1)\r\n        pygame.draw.circle(win, (255,255,0), (self.x, self.y), 50)\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/Campfire.py b/Campfire.py
+--- a/Campfire.py	
++++ b/Campfire.py	
+@@ -2,13 +2,26 @@
+ 
+ 
+ class Campfire:
+-    FREEZE_DISTANCE = 300
++    FREEZE_DISTANCE = 275
+ 
+     def __init__(self, x, y, health):
+         self.x = x
+         self.y = y
+         self.health = health
++        self.max_health = health
++        self.health_bar_length = 100
++        self.ratio = self.max_health/self.health_bar_length
+ 
+     def draw(self, win):
+         pygame.draw.circle(win, (255,0,0), (self.x, self.y), self.FREEZE_DISTANCE, 1)
+         pygame.draw.circle(win, (255,255,0), (self.x, self.y), 50)
++        pygame.draw.rect(win, (0,255,0), (self.x-50, self.y+50, self.health/self.ratio,15))
++        pygame.draw.rect(win, (0,0,0), (self.x-50, self.y+50, self.health_bar_length,15),3)
++
++    def take_damage(self, damage):
++        if(self.health > 0):
++            self.health -= damage
++
++    def gain_health(self, gain):
++        if self.health < self.max_health:
++            self.health += gain
+\ No newline at end of file
+Index: .idea/misc.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n<project version=\"4\">\r\n  <component name=\"ProjectRootManager\" version=\"2\" project-jdk-name=\"Python 3.7\" project-jdk-type=\"Python SDK\" />\r\n</project>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/.idea/misc.xml b/.idea/misc.xml
+--- a/.idea/misc.xml	
++++ b/.idea/misc.xml	
+@@ -1,4 +1,4 @@
+ <?xml version="1.0" encoding="UTF-8"?>
+ <project version="4">
+-  <component name="ProjectRootManager" version="2" project-jdk-name="Python 3.7" project-jdk-type="Python SDK" />
++  <component name="ProjectRootManager" version="2" project-jdk-name="Python 3.10 (FrostysWrath)" project-jdk-type="Python SDK" />
+ </project>
+\ No newline at end of file
+Index: .idea/FrostysWrath.iml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n<module type=\"PYTHON_MODULE\" version=\"4\">\r\n  <component name=\"NewModuleRootManager\">\r\n    <content url=\"file://$MODULE_DIR$\" />\r\n    <orderEntry type=\"jdk\" jdkName=\"Python 3.7\" jdkType=\"Python SDK\" />\r\n    <orderEntry type=\"sourceFolder\" forTests=\"false\" />\r\n  </component>\r\n  <component name=\"TestRunnerService\">\r\n    <option name=\"PROJECT_TEST_RUNNER\" value=\"pytest\" />\r\n  </component>\r\n</module>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/.idea/FrostysWrath.iml b/.idea/FrostysWrath.iml
+--- a/.idea/FrostysWrath.iml	
++++ b/.idea/FrostysWrath.iml	
+@@ -1,8 +1,10 @@
+ <?xml version="1.0" encoding="UTF-8"?>
+ <module type="PYTHON_MODULE" version="4">
+   <component name="NewModuleRootManager">
+-    <content url="file://$MODULE_DIR$" />
+-    <orderEntry type="jdk" jdkName="Python 3.7" jdkType="Python SDK" />
++    <content url="file://$MODULE_DIR$">
++      <excludeFolder url="file://$MODULE_DIR$/venv" />
++    </content>
++    <orderEntry type="inheritedJdk" />
+     <orderEntry type="sourceFolder" forTests="false" />
+   </component>
+   <component name="TestRunnerService">
+Index: .idea/workspace.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n<project version=\"4\">\r\n  <component name=\"ChangeListManager\">\r\n    <list default=\"true\" id=\"ac06a21b-cee8-494b-9131-d1e3af93e258\" name=\"Default Changelist\" comment=\"\">\r\n      <change beforePath=\"$PROJECT_DIR$/.idea/workspace.xml\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/.idea/workspace.xml\" afterDir=\"false\" />\r\n      <change beforePath=\"$PROJECT_DIR$/Main.py\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/Main.py\" afterDir=\"false\" />\r\n      <change beforePath=\"$PROJECT_DIR$/Player.py\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/Player.py\" afterDir=\"false\" />\r\n      <change beforePath=\"$PROJECT_DIR$/Projectiles.py\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/Projectiles.py\" afterDir=\"false\" />\r\n    </list>\r\n    <option name=\"SHOW_DIALOG\" value=\"false\" />\r\n    <option name=\"HIGHLIGHT_CONFLICTS\" value=\"true\" />\r\n    <option name=\"HIGHLIGHT_NON_ACTIVE_CHANGELIST\" value=\"false\" />\r\n    <option name=\"LAST_RESOLUTION\" value=\"IGNORE\" />\r\n  </component>\r\n  <component name=\"FileTemplateManagerImpl\">\r\n    <option name=\"RECENT_TEMPLATES\">\r\n      <list>\r\n        <option value=\"Python Script\" />\r\n      </list>\r\n    </option>\r\n  </component>\r\n  <component name=\"Git.Settings\">\r\n    <option name=\"RECENT_GIT_ROOT_PATH\" value=\"$PROJECT_DIR$\" />\r\n  </component>\r\n  <component name=\"MarkdownSettingsMigration\">\r\n    <option name=\"stateVersion\" value=\"1\" />\r\n  </component>\r\n  <component name=\"ProjectId\" id=\"22t7qsdRIjx08sxZZ949mgwmoB1\" />\r\n  <component name=\"ProjectLevelVcsManager\" settingsEditedManually=\"true\" />\r\n  <component name=\"ProjectViewState\">\r\n    <option name=\"hideEmptyMiddlePackages\" value=\"true\" />\r\n    <option name=\"showLibraryContents\" value=\"true\" />\r\n  </component>\r\n  <component name=\"PropertiesComponent\">\r\n    <property name=\"RunOnceActivity.OpenProjectViewOnStart\" value=\"true\" />\r\n    <property name=\"RunOnceActivity.ShowReadmeOnStart\" value=\"true\" />\r\n    <property name=\"SHARE_PROJECT_CONFIGURATION_FILES\" value=\"true\" />\r\n    <property name=\"last_opened_file_path\" value=\"$PROJECT_DIR$/../pygamespaceinvaders\" />\r\n    <property name=\"settings.editor.selected.configurable\" value=\"com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable\" />\r\n  </component>\r\n  <component name=\"RunManager\">\r\n    <configuration name=\"Main\" type=\"PythonConfigurationType\" factoryName=\"Python\" temporary=\"true\" nameIsGenerated=\"true\">\r\n      <module name=\"FrostysWrath\" />\r\n      <option name=\"INTERPRETER_OPTIONS\" value=\"\" />\r\n      <option name=\"PARENT_ENVS\" value=\"true\" />\r\n      <envs>\r\n        <env name=\"PYTHONUNBUFFERED\" value=\"1\" />\r\n      </envs>\r\n      <option name=\"SDK_HOME\" value=\"\" />\r\n      <option name=\"WORKING_DIRECTORY\" value=\"$PROJECT_DIR$\" />\r\n      <option name=\"IS_MODULE_SDK\" value=\"true\" />\r\n      <option name=\"ADD_CONTENT_ROOTS\" value=\"true\" />\r\n      <option name=\"ADD_SOURCE_ROOTS\" value=\"true\" />\r\n      <option name=\"SCRIPT_NAME\" value=\"$PROJECT_DIR$/Main.py\" />\r\n      <option name=\"PARAMETERS\" value=\"\" />\r\n      <option name=\"SHOW_COMMAND_LINE\" value=\"false\" />\r\n      <option name=\"EMULATE_TERMINAL\" value=\"false\" />\r\n      <option name=\"MODULE_MODE\" value=\"false\" />\r\n      <option name=\"REDIRECT_INPUT\" value=\"false\" />\r\n      <option name=\"INPUT_FILE\" value=\"\" />\r\n      <method v=\"2\" />\r\n    </configuration>\r\n    <recent_temporary>\r\n      <list>\r\n        <item itemvalue=\"Python.Main\" />\r\n      </list>\r\n    </recent_temporary>\r\n  </component>\r\n  <component name=\"ServiceViewManager\">\r\n    <option name=\"viewStates\">\r\n      <list>\r\n        <serviceView>\r\n          <treeState>\r\n            <expand />\r\n            <select />\r\n          </treeState>\r\n        </serviceView>\r\n      </list>\r\n    </option>\r\n  </component>\r\n  <component name=\"SpellCheckerSettings\" RuntimeDictionaries=\"0\" Folders=\"0\" CustomDictionaries=\"0\" DefaultDictionary=\"application-level\" UseSingleDictionary=\"true\" transferred=\"true\" />\r\n  <component name=\"SvnConfiguration\">\r\n    <configuration />\r\n  </component>\r\n  <component name=\"TaskManager\">\r\n    <task active=\"true\" id=\"Default\" summary=\"Default task\">\r\n      <changelist id=\"ac06a21b-cee8-494b-9131-d1e3af93e258\" name=\"Default Changelist\" comment=\"\" />\r\n      <created>1640647720578</created>\r\n      <option name=\"number\" value=\"Default\" />\r\n      <option name=\"presentableId\" value=\"Default\" />\r\n      <updated>1640647720578</updated>\r\n    </task>\r\n    <servers />\r\n  </component>\r\n  <component name=\"Vcs.Log.Tabs.Properties\">\r\n    <option name=\"TAB_STATES\">\r\n      <map>\r\n        <entry key=\"MAIN\">\r\n          <value>\r\n            <State>\r\n              <option name=\"COLUMN_ORDER\" />\r\n            </State>\r\n          </value>\r\n        </entry>\r\n      </map>\r\n    </option>\r\n  </component>\r\n  <component name=\"WindowStateProjectService\">\r\n    <state width=\"1515\" height=\"171\" key=\"GridCell.Tab.0.bottom\" timestamp=\"1640736066071\">\r\n      <screen x=\"0\" y=\"0\" width=\"1536\" height=\"824\" />\r\n    </state>\r\n    <state width=\"1515\" height=\"171\" key=\"GridCell.Tab.0.bottom/0.0.1536.824@0.0.1536.824\" timestamp=\"1640736066071\" />\r\n    <state width=\"1515\" height=\"171\" key=\"GridCell.Tab.0.center\" timestamp=\"1640736066071\">\r\n      <screen x=\"0\" y=\"0\" width=\"1536\" height=\"824\" />\r\n    </state>\r\n    <state width=\"1515\" height=\"171\" key=\"GridCell.Tab.0.center/0.0.1536.824@0.0.1536.824\" timestamp=\"1640736066071\" />\r\n    <state width=\"1515\" height=\"171\" key=\"GridCell.Tab.0.left\" timestamp=\"1640736066071\">\r\n      <screen x=\"0\" y=\"0\" width=\"1536\" height=\"824\" />\r\n    </state>\r\n    <state width=\"1515\" height=\"171\" key=\"GridCell.Tab.0.left/0.0.1536.824@0.0.1536.824\" timestamp=\"1640736066071\" />\r\n    <state width=\"1515\" height=\"171\" key=\"GridCell.Tab.0.right\" timestamp=\"1640736066071\">\r\n      <screen x=\"0\" y=\"0\" width=\"1536\" height=\"824\" />\r\n    </state>\r\n    <state width=\"1515\" height=\"171\" key=\"GridCell.Tab.0.right/0.0.1536.824@0.0.1536.824\" timestamp=\"1640736066071\" />\r\n    <state width=\"1515\" height=\"261\" key=\"GridCell.Tab.1.bottom\" timestamp=\"1640734054942\">\r\n      <screen x=\"0\" y=\"0\" width=\"1536\" height=\"824\" />\r\n    </state>\r\n    <state width=\"1515\" height=\"261\" key=\"GridCell.Tab.1.bottom/0.0.1536.824@0.0.1536.824\" timestamp=\"1640734054942\" />\r\n    <state width=\"1515\" height=\"261\" key=\"GridCell.Tab.1.center\" timestamp=\"1640734054942\">\r\n      <screen x=\"0\" y=\"0\" width=\"1536\" height=\"824\" />\r\n    </state>\r\n    <state width=\"1515\" height=\"261\" key=\"GridCell.Tab.1.center/0.0.1536.824@0.0.1536.824\" timestamp=\"1640734054942\" />\r\n    <state width=\"1515\" height=\"261\" key=\"GridCell.Tab.1.left\" timestamp=\"1640734054942\">\r\n      <screen x=\"0\" y=\"0\" width=\"1536\" height=\"824\" />\r\n    </state>\r\n    <state width=\"1515\" height=\"261\" key=\"GridCell.Tab.1.left/0.0.1536.824@0.0.1536.824\" timestamp=\"1640734054942\" />\r\n    <state width=\"1515\" height=\"261\" key=\"GridCell.Tab.1.right\" timestamp=\"1640734054942\">\r\n      <screen x=\"0\" y=\"0\" width=\"1536\" height=\"824\" />\r\n    </state>\r\n    <state width=\"1515\" height=\"261\" key=\"GridCell.Tab.1.right/0.0.1536.824@0.0.1536.824\" timestamp=\"1640734054942\" />\r\n    <state x=\"277\" y=\"54\" key=\"SettingsEditor\" timestamp=\"1640648989349\">\r\n      <screen x=\"0\" y=\"0\" width=\"1536\" height=\"824\" />\r\n    </state>\r\n    <state x=\"277\" y=\"54\" key=\"SettingsEditor/0.0.1536.824@0.0.1536.824\" timestamp=\"1640648989349\" />\r\n    <state x=\"465\" y=\"236\" key=\"com.intellij.ide.util.TipDialog\" timestamp=\"1640733888665\">\r\n      <screen x=\"0\" y=\"0\" width=\"1536\" height=\"824\" />\r\n    </state>\r\n    <state x=\"465\" y=\"236\" key=\"com.intellij.ide.util.TipDialog/0.0.1536.824@0.0.1536.824\" timestamp=\"1640733888665\" />\r\n  </component>\r\n</project>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/.idea/workspace.xml b/.idea/workspace.xml
+--- a/.idea/workspace.xml	
++++ b/.idea/workspace.xml	
+@@ -2,10 +2,11 @@
+ <project version="4">
+   <component name="ChangeListManager">
+     <list default="true" id="ac06a21b-cee8-494b-9131-d1e3af93e258" name="Default Changelist" comment="">
++      <change beforePath="$PROJECT_DIR$/.idea/FrostysWrath.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/FrostysWrath.iml" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/Campfire.py" beforeDir="false" afterPath="$PROJECT_DIR$/Campfire.py" afterDir="false" />
+       <change beforePath="$PROJECT_DIR$/Main.py" beforeDir="false" afterPath="$PROJECT_DIR$/Main.py" afterDir="false" />
+-      <change beforePath="$PROJECT_DIR$/Player.py" beforeDir="false" afterPath="$PROJECT_DIR$/Player.py" afterDir="false" />
+-      <change beforePath="$PROJECT_DIR$/Projectiles.py" beforeDir="false" afterPath="$PROJECT_DIR$/Projectiles.py" afterDir="false" />
+     </list>
+     <option name="SHOW_DIALOG" value="false" />
+     <option name="HIGHLIGHT_CONFLICTS" value="true" />
+@@ -97,54 +98,10 @@
+       <map>
+         <entry key="MAIN">
+           <value>
+-            <State>
+-              <option name="COLUMN_ORDER" />
+-            </State>
++            <State />
+           </value>
+         </entry>
+       </map>
+     </option>
+   </component>
+-  <component name="WindowStateProjectService">
+-    <state width="1515" height="171" key="GridCell.Tab.0.bottom" timestamp="1640736066071">
+-      <screen x="0" y="0" width="1536" height="824" />
+-    </state>
+-    <state width="1515" height="171" key="GridCell.Tab.0.bottom/0.0.1536.824@0.0.1536.824" timestamp="1640736066071" />
+-    <state width="1515" height="171" key="GridCell.Tab.0.center" timestamp="1640736066071">
+-      <screen x="0" y="0" width="1536" height="824" />
+-    </state>
+-    <state width="1515" height="171" key="GridCell.Tab.0.center/0.0.1536.824@0.0.1536.824" timestamp="1640736066071" />
+-    <state width="1515" height="171" key="GridCell.Tab.0.left" timestamp="1640736066071">
+-      <screen x="0" y="0" width="1536" height="824" />
+-    </state>
+-    <state width="1515" height="171" key="GridCell.Tab.0.left/0.0.1536.824@0.0.1536.824" timestamp="1640736066071" />
+-    <state width="1515" height="171" key="GridCell.Tab.0.right" timestamp="1640736066071">
+-      <screen x="0" y="0" width="1536" height="824" />
+-    </state>
+-    <state width="1515" height="171" key="GridCell.Tab.0.right/0.0.1536.824@0.0.1536.824" timestamp="1640736066071" />
+-    <state width="1515" height="261" key="GridCell.Tab.1.bottom" timestamp="1640734054942">
+-      <screen x="0" y="0" width="1536" height="824" />
+-    </state>
+-    <state width="1515" height="261" key="GridCell.Tab.1.bottom/0.0.1536.824@0.0.1536.824" timestamp="1640734054942" />
+-    <state width="1515" height="261" key="GridCell.Tab.1.center" timestamp="1640734054942">
+-      <screen x="0" y="0" width="1536" height="824" />
+-    </state>
+-    <state width="1515" height="261" key="GridCell.Tab.1.center/0.0.1536.824@0.0.1536.824" timestamp="1640734054942" />
+-    <state width="1515" height="261" key="GridCell.Tab.1.left" timestamp="1640734054942">
+-      <screen x="0" y="0" width="1536" height="824" />
+-    </state>
+-    <state width="1515" height="261" key="GridCell.Tab.1.left/0.0.1536.824@0.0.1536.824" timestamp="1640734054942" />
+-    <state width="1515" height="261" key="GridCell.Tab.1.right" timestamp="1640734054942">
+-      <screen x="0" y="0" width="1536" height="824" />
+-    </state>
+-    <state width="1515" height="261" key="GridCell.Tab.1.right/0.0.1536.824@0.0.1536.824" timestamp="1640734054942" />
+-    <state x="277" y="54" key="SettingsEditor" timestamp="1640648989349">
+-      <screen x="0" y="0" width="1536" height="824" />
+-    </state>
+-    <state x="277" y="54" key="SettingsEditor/0.0.1536.824@0.0.1536.824" timestamp="1640648989349" />
+-    <state x="465" y="236" key="com.intellij.ide.util.TipDialog" timestamp="1640733888665">
+-      <screen x="0" y="0" width="1536" height="824" />
+-    </state>
+-    <state x="465" y="236" key="com.intellij.ide.util.TipDialog/0.0.1536.824@0.0.1536.824" timestamp="1640733888665" />
+-  </component>
+ </project>
+\ No newline at end of file
