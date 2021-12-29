@@ -2,7 +2,7 @@ import pygame
 import pygame.gfxdraw
 import random
 import Helper
-import Snowmen
+
 
 class Campfire:
     FREEZE_DISTANCE = 175
@@ -39,7 +39,6 @@ class Campfire:
     def spawn_wood(self):
         if random.random() < self.WOOD_SPAWN_RATE:
             self.wood.append(Wood(self.get_wood_location()))
-
 
     def take_damage(self, damage):
         if self.health > 0:

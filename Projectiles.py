@@ -1,32 +1,10 @@
 import pygame
 import pygame.gfxdraw
 import math
+import Helper
 
 GRAVITY = 0.01
 BOUNDS_MARGIN = 30
-
-
-def find_angle(x1, y1, x2, y2):
-    try:
-        angle = math.atan((y2 - y1) / (x2 - x1))
-        # this tries to get the angle from the ground and the angle made by the mouse
-    except ArithmeticError:
-        angle = math.pi / 2
-        # if the above doesnt work then the result HAS to be this. this is because of unit circle
-
-    if y1 < y2 and x1 > x2:
-        angle = abs(angle)
-    elif y1 < y2 and x1 < x2:
-        angle = math.pi - angle
-    elif y1 > y2 and x1 < x2:
-        angle = math.pi + abs(angle)
-    elif y1 > y2 and x1 > x2:
-        angle = (math.pi * 2) - angle
-
-    # this chunk just figures out which quadrant you're shooting in
-    # remember in a graph with four quadrants, ball is 0,0
-
-    return angle - math.radians(90)
 
 
 class Projectile:
@@ -34,7 +12,7 @@ class Projectile:
         self.x = x
         self.y = y
         self.endpos = endpos  # the projectile's ideal ending position
-        self.angle = find_angle(x, y, endpos[0], endpos[1])
+        self.angle = Helper.find_angle(x, y, endpos[0], endpos[1])
         self.speed = speed
         self.damage = damage
         self.size = size
@@ -52,15 +30,22 @@ class Projectile:
 
 
 class Snowball(Projectile):
-    def __init__(self, x, y, endpos, speed, damage, size):
+    def __init__(self, x, y, endpos, speed, damage, size, goal):
         super().__init__(x, y, endpos, speed, damage, size)
         self.airtime = 0  # the amount of the time snowball been in the air
+        self.goal = goal
 
     def move(self):
         self.airtime += 1
         self.x = self.x + math.sin(self.angle) * self.speed
         self.y = self.y + (math.cos(self.angle) * self.speed) + (self.airtime * GRAVITY)  # fake arc for snowball
 
+    def hit_goal(self):
+        return Helper.get_distance(self.x, self.y, self.goal.x, self.goal.y) < self.speed + 1
+
 
 class Fireball(Projectile):
-    pass
+    def hit_snowman(self, snowmen):
+        for snowman in snowmen:
+            if Helper.collide(snowman.x, snowman.y, snowman.WIDTH, snowman.HEIGHT, self.x, self.y):
+                return snowman

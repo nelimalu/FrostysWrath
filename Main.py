@@ -1,9 +1,10 @@
 import pygame
 import Player
 import Campfire
-import Snowmen
+import Snowman
 import TitlePage
 import Helper
+import random
 
 WIDTH = 1100
 HEIGHT = 650
@@ -24,7 +25,6 @@ def update(player, fireballs, snowballs, campfire, snowmen):
 
     campfire.draw(win)
 
-
     for wood in campfire.wood:
         wood.draw(win)
         if Helper.collide(player.x, player.y, player.WIDTH, player.HEIGHT, wood.x, wood.y):
@@ -37,10 +37,10 @@ def update(player, fireballs, snowballs, campfire, snowmen):
 
     player.draw(win)
 
-    win.blit(trees, (0, 0))
-
-    for snowman in snowmen.snowmans:
+    for snowman in snowmen:
         snowman.draw(win)
+
+    win.blit(trees, (0, 0))
 
     player.draw_freezing(win, freezing)
     player.draw_fireball_bar(win, WIDTH)
@@ -53,8 +53,8 @@ def main():
 
     player = Player.Player(WIDTH // 2, HEIGHT // 2, 4)
     campfire = Campfire.Campfire(WIDTH // 2, HEIGHT // 2, 100)
-    snowmen = Snowmen.Snowmen((0,0), 20, 5, 2)
 
+    snowmen = []
     fireballs = []
     snowballs = []
 
@@ -75,20 +75,40 @@ def main():
                         fireballs.append(fireball)
                     # campfire.take_damage(5)
 
-        for x, projectile in enumerate([*fireballs, *snowballs]):
-            projectile.move()
-            if projectile.is_out_of_bounds(WIDTH, HEIGHT):
-                if x >= len(fireballs):
-                    snowballs.remove(projectile)
-                else:
-                    fireballs.remove(projectile)
+        for fireball in fireballs:
+            fireball.move()
+            hit = fireball.hit_snowman(snowmen)
+            if hit is not None:
+                hit.take_damage(fireball.damage)
+                if hit.is_dead():
+                    snowmen.remove(hit)
+            if fireball.is_out_of_bounds(WIDTH, HEIGHT):
+                fireballs.remove(fireball)
+
+        for snowball in snowballs:
+            snowball.move()
+            if snowball.hit_goal():
+                if snowball.goal == campfire:
+                    campfire.take_damage(snowball.damage)
+                    snowballs.remove(snowball)
+
+            if snowball.is_out_of_bounds(WIDTH, HEIGHT):
+                snowballs.remove(snowball)
 
         if player.time_freezing > 250:
             lost = True
             run = False
 
+        if random.random() < Snowman.SNOWMAN_SPAWN_RATE:
+            snowmen.append(Snowman.spawn_snowman(WIDTH, HEIGHT, campfire))
+
+        for snowman in snowmen:
+            snowball = snowman.shoot()
+            if snowball is not None:
+                snowballs.append(snowball)
+            snowman.move()
+
         campfire.spawn_wood()
-        snowmen.spawn_snowman()
         player.update(keys, campfire)
         update(player, fireballs, snowballs, campfire, snowmen)
 
