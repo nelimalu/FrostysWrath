@@ -43,6 +43,7 @@ def main():
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if event.button == pygame.BUTTON_LEFT:
                     fireballs.append(player.shoot(mousepos))
+                    campfire.take_damage(5)
 
         for x, projectile in enumerate([*fireballs, *snowballs]):
             projectile.move()
