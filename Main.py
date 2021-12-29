@@ -1,6 +1,7 @@
 import pygame
 import Player
 import Campfire
+import Snowmen
 import TitlePage
 import Helper
 
@@ -14,19 +15,22 @@ trees = pygame.image.load('assets/Background-trees.png')
 freezing = pygame.image.load('assets/Freezing.png').convert()
 
 clock = pygame.time.Clock()
+ticks = 0
 lost = False
 
 
-def update(player, fireballs, snowballs, campfire):
+def update(player, fireballs, snowballs, campfire, snowmen):
     win.blit(background, (0, 0))
 
     campfire.draw(win)
+
 
     for wood in campfire.wood:
         wood.draw(win)
         if Helper.collide(player.x, player.y, player.WIDTH, player.HEIGHT, wood.x, wood.y):
             campfire.wood.remove(wood)
-            campfire.health += wood.HEAL_AMOUNT
+            if campfire.health < campfire.max_health:
+                campfire.health += wood.HEAL_AMOUNT
 
     for x, projectile in enumerate([*fireballs, *snowballs]):
         projectile.draw(win)
@@ -34,6 +38,9 @@ def update(player, fireballs, snowballs, campfire):
     player.draw(win)
 
     win.blit(trees, (0, 0))
+
+    for snowman in snowmen.snowmans:
+        snowman.draw(win)
 
     player.draw_freezing(win, freezing)
     player.draw_fireball_bar(win, WIDTH)
@@ -46,6 +53,7 @@ def main():
 
     player = Player.Player(WIDTH // 2, HEIGHT // 2, 4)
     campfire = Campfire.Campfire(WIDTH // 2, HEIGHT // 2, 100)
+    snowmen = Snowmen.Snowmen((0,0), 20, 5, 2)
 
     fireballs = []
     snowballs = []
@@ -65,7 +73,7 @@ def main():
                     fireball = player.shoot(mousepos)
                     if fireball is not None:
                         fireballs.append(fireball)
-                    campfire.take_damage(5)
+                    # campfire.take_damage(5)
 
         for x, projectile in enumerate([*fireballs, *snowballs]):
             projectile.move()
@@ -80,8 +88,9 @@ def main():
             run = False
 
         campfire.spawn_wood()
+        snowmen.spawn_snowman()
         player.update(keys, campfire)
-        update(player, fireballs, snowballs, campfire)
+        update(player, fireballs, snowballs, campfire, snowmen)
 
 
 if __name__ == "__main__":

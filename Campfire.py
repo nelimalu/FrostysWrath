@@ -2,12 +2,12 @@ import pygame
 import pygame.gfxdraw
 import random
 import Helper
-
+import Snowmen
 
 class Campfire:
     FREEZE_DISTANCE = 175
     GAIN_DISTANCE = 50
-    WOOD_SPAWN_RATE = 0.01
+    WOOD_SPAWN_RATE = 0.005
     BORDER = (125, 100, 1000, 550)
 
     def __init__(self, x, y, health):
@@ -40,6 +40,7 @@ class Campfire:
         if random.random() < self.WOOD_SPAWN_RATE:
             self.wood.append(Wood(self.get_wood_location()))
 
+
     def take_damage(self, damage):
         if self.health > 0:
             self.health -= damage
@@ -60,5 +61,5 @@ class Wood:
 
     def draw(self, win):
         # aidan magic
-        pygame.draw.rect(win, (128,128,0), (self.x - self.width, self.y - self.height, self.width, self.height))
+        pygame.draw.rect(win, (150, 75, 0), (self.x - self.width, self.y - self.height, self.width, self.height))
 
