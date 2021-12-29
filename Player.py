@@ -2,10 +2,12 @@ import pygame
 import pygame.gfxdraw
 import Projectiles
 import Helper
+import time
 
 
 class Player:
     FIRE_REGEN_RATE = 1  # regenerate 1 fireball per second
+    MAX_FIREBALLS = 5
     FREEZE_SPEED = 0.1
     WIDTH = 25
     HEIGHT = 25
@@ -15,7 +17,7 @@ class Player:
         self.y = y
         self.speed = speed
         self.fireballs = 0  # how many fireballs the player has
-        self.freezing = False
+        self.time_gaining = 0
         self.time_freezing = 0
 
     def draw(self, win, width, height):
@@ -30,9 +32,18 @@ class Player:
         else:
             self.time_freezing = self.time_freezing - self.FREEZE_SPEED if self.time_freezing > 0 else 0
 
+    def check_gain(self, campfire):
+        if Helper.get_distance(self.x, self.y, campfire.x, campfire.y) < campfire.GAIN_DISTANCE:
+            if self.time_gaining == 0:
+                self.time_gaining = time.time()
+            elif time.time() - self.time_gaining >= self.FIRE_REGEN_RATE:
+                self.fireballs += 1 if self.fireballs < self.MAX_FIREBALLS else 0
+                self.time_gaining = time.time()
+
     def update(self, keys, campfire):
         self.move(keys)
         self.check_freezing(campfire)
+        self.check_gain(campfire)
 
     def move(self, keys):
         speed = self.speed - (self.time_freezing * 0.1)
@@ -49,5 +60,6 @@ class Player:
             self.x += speed
 
     def shoot(self, endpos):
-        # run animation here
-        return Projectiles.Fireball(self.x, self.y, endpos, 6, 1, 5)
+        if self.fireballs > 0:
+            self.fireballs -= 1
+            return Projectiles.Fireball(self.x, self.y, endpos, 6, 1, 5)
