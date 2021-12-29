@@ -17,7 +17,7 @@ class Snowman:
     WIDTH = 25
     HEIGHT = 50
 
-    def __init__(self, location, goal, health, speed, damage, throwing_range):
+    def __init__(self, location, goal, health, speed, damage, throwing_range, points):
         self.x = location[0]
         self.y = location[1]
         self.goal = goal
@@ -28,6 +28,7 @@ class Snowman:
         self.angle = Helper.find_angle(self.x, self.y, goal.x, goal.y)
         self.reached_goal = False
         self.time_since_last_shot = 0
+        self.points = points
 
     def draw(self, win):
         # aidan walking cycle
@@ -68,6 +69,7 @@ def spawn_snowman(width, height, campfire):
     speed = 2
     damage = 1
     throwing_range = 200
-    return Snowman(get_snowman_location(width, height, campfire.BORDER), campfire, health, speed, damage, throwing_range)
+    points = 5
+    return Snowman(get_snowman_location(width, height, campfire.BORDER), campfire, health, speed, damage, throwing_range, points)
 
 # MAKE FIREBALLS COLLIDE WITH SNOWMAN

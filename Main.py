@@ -18,14 +18,21 @@ trees = pygame.image.load('assets/Background-trees.png')
 freezing = pygame.image.load('assets/Freezing.png').convert()
 
 clock = pygame.time.Clock()
-ticks = 0
 lost = False
 
+# FONTS
+pygame.font.init()
+SCORE_FONT = pygame.font.SysFont('comicsans', 60)
+
+score = 0
 
 def update(player, fireballs, snowballs, campfire, snowmen):
     win.blit(background, (0, 0))
 
     campfire.draw(win)
+
+    score_text = SCORE_FONT.render(str(score), 1, (255, 255, 0))
+
 
     for wood in campfire.wood:
         wood.draw(win)
@@ -33,6 +40,7 @@ def update(player, fireballs, snowballs, campfire, snowmen):
             campfire.wood.remove(wood)
             if campfire.health < campfire.max_health:
                 campfire.health += wood.HEAL_AMOUNT
+                print("heal")
 
     for x, projectile in enumerate([*fireballs, *snowballs]):
         projectile.draw(win)
@@ -44,6 +52,8 @@ def update(player, fireballs, snowballs, campfire, snowmen):
 
     win.blit(trees, (0, 0))
 
+    win.blit(score_text, (WIDTH//2 - score_text.get_width() // 2, HEIGHT-125))
+
     player.draw_freezing(win, freezing)
     player.draw_fireball_bar(win, WIDTH)
 
@@ -52,6 +62,7 @@ def update(player, fireballs, snowballs, campfire, snowmen):
 
 def main():
     global lost
+    global score
 
     player = Player.Player(WIDTH // 2, HEIGHT // 2, 4)
     campfire = Campfire.Campfire(WIDTH // 2, HEIGHT // 2, 100)
@@ -82,6 +93,7 @@ def main():
             hit = fireball.hit_snowman(snowmen)
             if hit is not None:
                 hit.take_damage(fireball.damage)
+                score += hit.points
                 if hit.is_dead():
                     snowmen.remove(hit)
                     fireballs.remove(fireball)
