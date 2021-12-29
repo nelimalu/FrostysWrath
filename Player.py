@@ -24,13 +24,11 @@ class Player:
         self.bar_length = 500
         self.ratio = self.max_fireball/self.bar_length
 
-    def draw(self, win, width, height):
+    def draw(self, win):
         pygame.draw.rect(win, (0,0,0), (self.x - (self.WIDTH // 2), self.y - (self.HEIGHT // 2), self.WIDTH, self.HEIGHT))
-        self.draw_fireball_bar(win,width)
 
-        if self.time_freezing > 0:
-            pygame.gfxdraw.filled_polygon(win, ((0, 0), (0, height), (width, height), (width, 0)), (0, 191, 255, self.time_freezing))
-        if self.time_freezing > 0:
+    def draw_freezing(self, win, width, height):
+        if 250 > self.time_freezing > 0:
             pygame.gfxdraw.filled_polygon(win, ((0, 0), (0, height), (width, height), (width, 0)), (0, 191, 255, self.time_freezing))
 
     def check_freezing(self, campfire):

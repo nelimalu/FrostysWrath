@@ -8,23 +8,35 @@ HEIGHT = 650
 win = pygame.display.set_mode((WIDTH, HEIGHT))
 pygame.display.set_caption("Frosty's Wrath")
 
+background = pygame.image.load('assets/Background-snow.png')
+trees = pygame.image.load('assets/Background-trees.png')
+
 clock = pygame.time.Clock()
+lost = False
 
 
 def update(player, fireballs, snowballs, campfire):
-    win.fill((255,255,255))
+    win.blit(background, (0, 0))
 
     campfire.draw(win)
 
     for x, projectile in enumerate([*fireballs, *snowballs]):
         projectile.draw(win)
 
-    player.draw(win, WIDTH, HEIGHT)
+    player.draw(win)
+
+    win.blit(trees, (0, 0))
+
+    player.draw_freezing(win, WIDTH, HEIGHT)
+
+    player.draw_fireball_bar(win, WIDTH)
 
     pygame.display.flip()
 
 
 def main():
+    global lost
+
     player = Player.Player(100, 100, 4)
     campfire = Campfire.Campfire(WIDTH // 2, HEIGHT // 2, 100)
 
@@ -55,6 +67,10 @@ def main():
                     snowballs.remove(projectile)
                 else:
                     fireballs.remove(projectile)
+
+        if player.time_freezing > 250:
+            lost = True
+            run = False
 
         player.update(keys, campfire)
         update(player, fireballs, snowballs, campfire)

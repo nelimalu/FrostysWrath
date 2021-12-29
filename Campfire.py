@@ -2,7 +2,7 @@ import pygame
 
 
 class Campfire:
-    FREEZE_DISTANCE = 250
+    FREEZE_DISTANCE = 175
     GAIN_DISTANCE = 50
 
     def __init__(self, x, y, health):
