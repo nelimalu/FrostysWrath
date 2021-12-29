@@ -1,5 +1,7 @@
 import pygame
+import pygame.gfxdraw
 import Projectiles
+import Helper
 
 
 class Player:
@@ -12,10 +14,16 @@ class Player:
         self.y = y
         self.speed = speed
         self.fireballs = 0  # how many fireballs the player has
-        self.health = 100
+        self.freezing = False
 
-    def draw(self, win):
+    def draw(self, win, width, height):
         pygame.draw.rect(win, (0,0,0), (self.x - (self.WIDTH // 2), self.y - (self.HEIGHT // 2), self.WIDTH, self.HEIGHT))
+
+        if self.freezing:
+            pygame.gfxdraw.rectangle(win, (0, 0, width, height), (0, 191, 255, 50))
+
+    def check_freezing(self, campfire):
+        return Helper.get_distance(self.x, self.y, campfire.x, campfire.y) > campfire.FREEZE_DISTANCE
 
     def move(self, keys):
         if keys[pygame.K_w] or keys[pygame.K_UP]:
@@ -29,4 +37,4 @@ class Player:
 
     def shoot(self, endpos):
         # run animation here
-        return Projectiles.Fireball(self.x, self.y, endpos, 1, 1, 5)
+        return Projectiles.Snowball(self.x, self.y, endpos, 1, 1, 5)

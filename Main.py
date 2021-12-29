@@ -1,5 +1,6 @@
 import pygame
 import Player
+import Campfire
 
 WIDTH = 1100
 HEIGHT = 650
@@ -9,26 +10,29 @@ pygame.display.set_caption("Frosty's Wrath")
 clock = pygame.time.Clock()
 
 
-def update(player, fireballs, snowballs):
+def update(player, fireballs, snowballs, campfire):
     win.fill((255,255,255))
 
-    player.draw(win)
+    campfire.draw(win)
 
     for x, projectile in enumerate([*fireballs, *snowballs]):
         projectile.draw(win)
+
+    player.draw(win, WIDTH, HEIGHT)
 
     pygame.display.flip()
 
 
 def main():
     player = Player.Player(100, 100, 1)
+    campfire = Campfire.Campfire(WIDTH // 2, HEIGHT // 2, 100)
 
     fireballs = []
     snowballs = []
 
     run = True
     while run:
-        clock.tick(60)
+        # clock.tick(60)
 
         keys = pygame.key.get_pressed()
         mousepos = pygame.mouse.get_pos()
@@ -48,7 +52,7 @@ def main():
                     fireballs.remove(projectile)
 
         player.move(keys)
-        update(player, fireballs, snowballs)
+        update(player, fireballs, snowballs, campfire)
 
 
 if __name__ == "__main__":
