@@ -132,21 +132,23 @@ def main():
 
 
 if __name__ == "__main__":
-    message = EndPage.DynamicText(FONT, "Game Over...", (WIDTH//2-250, HEIGHT//2-200), autoreset=False)
+
     TitlePage.play(win)
     if TitlePage.go_next:
         main()
+
+    string = "Game Over"
+    game_over_text = FONT.render(string, 1, (0, 128, 0))
+    pygame.gfxdraw.filled_polygon(win, ((0, 0), (0, HEIGHT), (WIDTH, HEIGHT), (WIDTH, 0)), (200, 20, 20, 100))
+    for i in range(len(string)):
+        text = FONT.render(string[i], True, (0, 128, 0))
+        win.blit(text, (300 + (FONT.size(string[:i])[0]), 250))
+        pygame.display.update()
+        clock.tick(2)
+    win.blit(game_over_text, ( WIDTH//2 - 300, HEIGHT//2 - 250))
     while lost:
         for event in pygame.event.get():
-            if event.type == pygame.QUIT: break
-            if event.type == pygame.USEREVENT: message.update()
-        else:
-            win.fill(pygame.color.Color('black'))
-            message.draw(win)
-            pygame.display.flip()
-            clock.tick(60)
-            continue
-        break
-
+            if event.type == pygame.QUIT:
+                lost = False
 
 pygame.quit()
