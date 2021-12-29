@@ -1,0 +1,55 @@
+Index: Player.py
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>import pygame\r\nimport pygame.gfxdraw\r\nimport Projectiles\r\nimport Helper\r\nimport time\r\n\r\n\r\nclass Player:\r\n    FIRE_REGEN_RATE = 1  # regenerate 1 fireball per second\r\n    MAX_FIREBALLS = 5\r\n    FREEZE_SPEED = 0.1\r\n    WIDTH = 25\r\n    HEIGHT = 25\r\n\r\n    def __init__(self, x, y, speed):\r\n        self.x = x\r\n        self.y = y\r\n        self.speed = speed\r\n        self.fireballs = 3  # how many fireballs the player has\r\n        self.freezing = False\r\n        self.time_freezing = 0\r\n        self.max_fireball = 5\r\n        self.time_gaining = 0\r\n        self.bar_length = 500\r\n        self.ratio = self.max_fireball/self.bar_length\r\n\r\n    def draw(self, win, width, height):\r\n        pygame.draw.rect(win, (0,0,0), (self.x - (self.WIDTH // 2), self.y - (self.HEIGHT // 2), self.WIDTH, self.HEIGHT))\r\n        self.draw_fireball_bar(win,width)\r\n\r\n        if self.time_freezing > 0:\r\n            pygame.gfxdraw.filled_polygon(win, ((0, 0), (0, height), (width, height), (width, 0)), (0, 191, 255, self.time_freezing))\r\n        if self.time_freezing > 0:\r\n            pygame.gfxdraw.filled_polygon(win, ((0, 0), (0, height), (width, height), (width, 0)), (0, 191, 255, self.time_freezing))\r\n\r\n    def check_freezing(self, campfire):\r\n        if Helper.get_distance(self.x, self.y, campfire.x, campfire.y) > campfire.FREEZE_DISTANCE:\r\n            self.time_freezing += self.FREEZE_SPEED\r\n        else:\r\n            self.time_freezing = self.time_freezing - self.FREEZE_SPEED if self.time_freezing > 0 else 0\r\n\r\n    def check_gain(self, campfire):\r\n        if Helper.get_distance(self.x, self.y, campfire.x, campfire.y) < campfire.GAIN_DISTANCE:\r\n            if self.time_gaining == 0:\r\n                self.time_gaining = time.time()\r\n            elif time.time() - self.time_gaining >= self.FIRE_REGEN_RATE:\r\n                self.fireballs += 1 if self.fireballs < self.MAX_FIREBALLS else 0\r\n                self.time_gaining = time.time()\r\n\r\n    def update(self, keys, campfire):\r\n        self.move(keys)\r\n        self.check_freezing(campfire)\r\n        self.check_gain(campfire)\r\n\r\n    def move(self, keys):\r\n        speed = self.speed - (self.time_freezing * 0.1)\r\n        if speed < 1:\r\n            speed = 1\r\n\r\n        if keys[pygame.K_w] or keys[pygame.K_UP]:\r\n            self.y -= speed\r\n        if keys[pygame.K_s] or keys[pygame.K_DOWN]:\r\n            self.y += speed\r\n        if keys[pygame.K_a] or keys[pygame.K_LEFT]:\r\n            self.x -= speed\r\n        if keys[pygame.K_d] or keys[pygame.K_RIGHT]:\r\n            self.x += speed\r\n\r\n    def draw_fireball_bar(self, win, width):\r\n        pygame.draw.rect(win, (255,165,0), (width//2-250, 600,self.fireballs/self.ratio,25))\r\n        pygame.draw.rect(win, (0,0,0), (width//2-250, 600,self.bar_length,25),5)\r\n\r\n    def shoot(self, endpos):\r\n        if self.fireballs > 0:\r\n            self.fireballs -= 1\r\n            return Projectiles.Fireball(self.x, self.y, endpos, 6, 1, 5)\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/Player.py b/Player.py
+--- a/Player.py	(revision 9b23860c03a16f8e0226b7f4b95ef923280e867b)
++++ b/Player.py	(date 1640749342114)
+@@ -16,7 +16,7 @@
+         self.x = x
+         self.y = y
+         self.speed = speed
+-        self.fireballs = 3  # how many fireballs the player has
++        self.fireballs = 5  # how many fireballs the player has
+         self.freezing = False
+         self.time_freezing = 0
+         self.max_fireball = 5
+Index: .idea/misc.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n<project version=\"4\">\r\n  <component name=\"ProjectRootManager\" version=\"2\" project-jdk-name=\"Python 3.7\" project-jdk-type=\"Python SDK\" />\r\n</project>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/.idea/misc.xml b/.idea/misc.xml
+--- a/.idea/misc.xml	(revision 9b23860c03a16f8e0226b7f4b95ef923280e867b)
++++ b/.idea/misc.xml	(date 1640748074012)
+@@ -1,4 +1,4 @@
+ <?xml version="1.0" encoding="UTF-8"?>
+ <project version="4">
+-  <component name="ProjectRootManager" version="2" project-jdk-name="Python 3.7" project-jdk-type="Python SDK" />
++  <component name="ProjectRootManager" version="2" project-jdk-name="Python 3.10 (FrostysWrath)" project-jdk-type="Python SDK" />
+ </project>
+\ No newline at end of file
+Index: .idea/FrostysWrath.iml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n<module type=\"PYTHON_MODULE\" version=\"4\">\r\n  <component name=\"NewModuleRootManager\">\r\n    <content url=\"file://$MODULE_DIR$\">\r\n      <excludeFolder url=\"file://$MODULE_DIR$/venv\" />\r\n    </content>\r\n    <orderEntry type=\"jdk\" jdkName=\"Python 3.7\" jdkType=\"Python SDK\" />\r\n    <orderEntry type=\"sourceFolder\" forTests=\"false\" />\r\n  </component>\r\n  <component name=\"TestRunnerService\">\r\n    <option name=\"PROJECT_TEST_RUNNER\" value=\"pytest\" />\r\n  </component>\r\n</module>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/.idea/FrostysWrath.iml b/.idea/FrostysWrath.iml
+--- a/.idea/FrostysWrath.iml	(revision 9b23860c03a16f8e0226b7f4b95ef923280e867b)
++++ b/.idea/FrostysWrath.iml	(date 1640748074005)
+@@ -4,7 +4,7 @@
+     <content url="file://$MODULE_DIR$">
+       <excludeFolder url="file://$MODULE_DIR$/venv" />
+     </content>
+-    <orderEntry type="jdk" jdkName="Python 3.7" jdkType="Python SDK" />
++    <orderEntry type="inheritedJdk" />
+     <orderEntry type="sourceFolder" forTests="false" />
+   </component>
+   <component name="TestRunnerService">

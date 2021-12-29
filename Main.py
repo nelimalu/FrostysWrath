@@ -1,32 +1,62 @@
 import pygame
 import Player
 import Campfire
+import Snowman
+import TitlePage
+import Helper
+import random
+
+# update
 
 WIDTH = 1100
 HEIGHT = 650
 win = pygame.display.set_mode((WIDTH, HEIGHT))
 pygame.display.set_caption("Frosty's Wrath")
 
+background = pygame.image.load('assets/Background-snow.png')
+trees = pygame.image.load('assets/Background-trees.png')
+freezing = pygame.image.load('assets/Freezing.png').convert()
+
 clock = pygame.time.Clock()
+ticks = 0
+lost = False
 
 
-def update(player, fireballs, snowballs, campfire):
-    win.fill((255,255,255))
+def update(player, fireballs, snowballs, campfire, snowmen):
+    win.blit(background, (0, 0))
 
     campfire.draw(win)
+
+    for wood in campfire.wood:
+        wood.draw(win)
+        if Helper.collide(player.x, player.y, player.WIDTH, player.HEIGHT, wood.x, wood.y):
+            campfire.wood.remove(wood)
+            if campfire.health < campfire.max_health:
+                campfire.health += wood.HEAL_AMOUNT
 
     for x, projectile in enumerate([*fireballs, *snowballs]):
         projectile.draw(win)
 
-    player.draw(win, WIDTH, HEIGHT)
+    player.draw(win)
+
+    for snowman in snowmen:
+        snowman.draw(win)
+
+    win.blit(trees, (0, 0))
+
+    player.draw_freezing(win, freezing)
+    player.draw_fireball_bar(win, WIDTH)
 
     pygame.display.flip()
 
 
 def main():
-    player = Player.Player(100, 100, 4)
+    global lost
+
+    player = Player.Player(WIDTH // 2, HEIGHT // 2, 4)
     campfire = Campfire.Campfire(WIDTH // 2, HEIGHT // 2, 100)
 
+    snowmen = []
     fireballs = []
     snowballs = []
 
@@ -42,22 +72,52 @@ def main():
                 run = False
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if event.button == pygame.BUTTON_LEFT:
-                    fireballs.append(player.shoot(mousepos))
-                    campfire.take_damage(5)
+                    fireball = player.shoot(mousepos)
+                    if fireball is not None:
+                        fireballs.append(fireball)
+                    # campfire.take_damage(5)
 
-        for x, projectile in enumerate([*fireballs, *snowballs]):
-            projectile.move()
-            if projectile.is_out_of_bounds(WIDTH, HEIGHT):
-                if x >= len(fireballs):
-                    snowballs.remove(projectile)
-                else:
-                    fireballs.remove(projectile)
+        for fireball in fireballs:
+            fireball.move()
+            hit = fireball.hit_snowman(snowmen)
+            if hit is not None:
+                hit.take_damage(fireball.damage)
+                if hit.is_dead():
+                    snowmen.remove(hit)
+            if fireball.is_out_of_bounds(WIDTH, HEIGHT):
+                fireballs.remove(fireball)
 
+        for snowball in snowballs:
+            snowball.move()
+            if snowball.hit_goal():
+                if snowball.goal == campfire:
+                    campfire.take_damage(snowball.damage)
+                    snowballs.remove(snowball)
+
+            if snowball.is_out_of_bounds(WIDTH, HEIGHT):
+                snowballs.remove(snowball)
+
+        if player.time_freezing > 250:
+            lost = True
+            run = False
+
+        if random.random() < Snowman.SNOWMAN_SPAWN_RATE:
+            snowmen.append(Snowman.spawn_snowman(WIDTH, HEIGHT, campfire))
+
+        for snowman in snowmen:
+            snowball = snowman.shoot()
+            if snowball is not None:
+                snowballs.append(snowball)
+            snowman.move()
+
+        campfire.spawn_wood()
         player.update(keys, campfire)
-        update(player, fireballs, snowballs, campfire)
+        update(player, fireballs, snowballs, campfire, snowmen)
 
 
 if __name__ == "__main__":
-    main()
+    TitlePage.play(win)
+    if TitlePage.go_next:
+        main()
 
 pygame.quit()
