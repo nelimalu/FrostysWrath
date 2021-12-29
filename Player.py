@@ -86,4 +86,7 @@ class Player:
     def shoot(self, endpos):
         if self.fireballs > 0:
             self.fireballs -= 1
-            return Projectiles.Fireball(self.x, self.y, endpos, 6, 1, 5)
+            speed = 4
+            damage = 15
+            size = 5
+            return Projectiles.Fireball(self.x, self.y, endpos, speed, damage, size)

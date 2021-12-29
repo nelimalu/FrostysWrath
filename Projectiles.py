@@ -49,5 +49,7 @@ class Snowball(Projectile):
 class Fireball(Projectile):
     def hit_snowman(self, snowmen):
         for snowman in snowmen:
-            if Helper.collide(snowman.x, snowman.y, snowman.WIDTH, snowman.HEIGHT, self.x, self.y):
+            x = snowman.x - (snowman.WIDTH // 2)
+            y = snowman.y - (snowman.HEIGHT // 2)
+            if Helper.collide(x, y, snowman.WIDTH, snowman.HEIGHT, self.x, self.y):
                 return snowman
