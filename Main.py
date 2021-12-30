@@ -143,6 +143,7 @@ if __name__ == "__main__":
         if lost:
             EndPage.play(win, WIDTH, HEIGHT, clock, score)
             lost = False
+            score = 0
             TitlePage.go_next = False
 
 
