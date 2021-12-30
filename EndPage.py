@@ -30,7 +30,7 @@ def next_game():
     TitlePage.run = True
 
 
-def play(win, width, height, clock, score):
+def play(win, width, height, clock, score, outersloth):
     global run, retry
     run = True
 
@@ -39,6 +39,7 @@ def play(win, width, height, clock, score):
     string = "Game Over"
     game_over_text = FONT.render(string, 1, (0, 0, 0))
     pygame.gfxdraw.filled_polygon(win, ((0, 0), (0, height), (width, height), (width, 0)), (200, 20, 20, 175))
+    win.blit(outersloth, (win.get_width() - 70, win.get_height() - 70))
     for i in range(-1, len(string)):
         if not run:
             break

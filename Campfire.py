@@ -3,8 +3,6 @@ import pygame.gfxdraw
 import random
 import Helper
 
-# update
-
 
 class Campfire:
     FREEZE_DISTANCE = 175

@@ -7,17 +7,19 @@ import Helper
 import random
 import EndPage
 
-# update
+pygame.mixer.init()
 
 WIDTH = 1100
 HEIGHT = 650
 win = pygame.display.set_mode((WIDTH, HEIGHT))
 pygame.display.set_caption("Frosty's Wrath")
+pygame.display.set_icon(pygame.image.load('assets/Outersloth.png'))
 
 background = pygame.image.load('assets/Background-snow.png')
 trees = pygame.image.load('assets/Background-trees.png')
 freezing = pygame.image.load('assets/Freezing.png').convert()
 campfires = [pygame.image.load('assets/Campfire-' + str(i) + ".png") for i in range(1, 4)]
+outersloth = pygame.image.load('assets/Outersloth-white.png')
 
 clock = pygame.time.Clock()
 lost = False
@@ -44,6 +46,8 @@ def update(player, fireballs, snowballs, campfire, snowmen):
             campfire.wood.remove(wood)
             if campfire.health < campfire.max_health:
                 campfire.health += wood.HEAL_AMOUNT
+                if campfire.health > 100:
+                    campfire.health = 100
 
     for x, projectile in enumerate([*fireballs, *snowballs]):
         projectile.draw(win)
@@ -59,6 +63,8 @@ def update(player, fireballs, snowballs, campfire, snowmen):
 
     player.draw_freezing(win, freezing)
     player.draw_fireball_bar(win, WIDTH)
+
+    win.blit(outersloth, (WIDTH - 70, HEIGHT - 70))
 
     pygame.display.flip()
 
@@ -136,12 +142,12 @@ if __name__ == "__main__":
     while EndPage.retry or first:
         first = False
         EndPage.retry = False
-        TitlePage.play(win, background, trees, campfires)
+        TitlePage.play(win, background, trees, campfires, outersloth)
         if TitlePage.go_next:
             main()
 
         if lost:
-            EndPage.play(win, WIDTH, HEIGHT, clock, score)
+            EndPage.play(win, WIDTH, HEIGHT, clock, score, outersloth)
             lost = False
             score = 0
             TitlePage.go_next = False

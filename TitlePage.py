@@ -1,8 +1,14 @@
 import pygame
 pygame.font.init()
+pygame.mixer.init()
 
 STAT_FONT = pygame.font.Font('assets/Snowby.ttf', 90)
 ANIMATION_RATE = 5
+
+campfiresounds = pygame.mixer.music.load("assets/CampfireSounds.mp3")
+pygame.mixer.music.set_volume(0.5)
+pygame.mixer.music.play(-1)
+pygame.mixer.music.pause()
 
 go_next = False
 run = True
@@ -46,11 +52,12 @@ class Button:
 
 def cont():
     global run, go_next
+    pygame.mixer.music.pause()
     go_next = True
     run = False
 
 
-def update(win, buttons, background, trees, campfires, animation_step):
+def update(win, buttons, background, trees, campfires, animation_step, outersloth):
     win.blit(background, (0, 0))
     win.blit(trees, (0, 0))
     win.blit(campfires[animation_step], (win.get_width() // 2 - 70, win.get_height() // 2 - 70))
@@ -60,15 +67,19 @@ def update(win, buttons, background, trees, campfires, animation_step):
     for button in buttons:
         button.draw(win)
 
+    win.blit(outersloth, (win.get_width() - 70, win.get_height() - 70))
+
     pygame.display.flip()
 
 
-def play(win, background, trees, campfires):
+def play(win, background, trees, campfires, outersloth):
     global run
 
     buttons = [Button(win, 400, "P LAY", 80, 'Snowby.ttf', cont)]
     animation_step = 0
     frame = 0
+
+    pygame.mixer.music.unpause()
 
     while run:
         mousepos = pygame.mouse.get_pos()
@@ -89,4 +100,4 @@ def play(win, background, trees, campfires):
         for button in buttons:
             button.hover(mousepos)
 
-        update(win, buttons, background, trees, campfires, animation_step)
+        update(win, buttons, background, trees, campfires, animation_step, outersloth)
