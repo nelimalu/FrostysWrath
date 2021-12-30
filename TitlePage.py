@@ -1,7 +1,8 @@
 import pygame
 pygame.font.init()
 
-STAT_FONT = pygame.font.Font('assets/Snowby.ttf', 100)
+STAT_FONT = pygame.font.Font('assets/Snowby.ttf', 90)
+ANIMATION_RATE = 5
 
 go_next = False
 run = True
@@ -28,7 +29,7 @@ class Button:
     def hover(self, mousepos):
         if self.x <= mousepos[0] <= self.x + self.text.get_width() and \
                 self.y <= mousepos[1] <= self.text.get_height() + self.y:
-            self.colour = (0, 200, 0)
+            self.colour = (0,128,128)
             self.text = self.font.render(self.string_text, True, self.colour)
         else:
             self.colour = (0, 0, 0)
@@ -49,10 +50,12 @@ def cont():
     run = False
 
 
-def update(win, buttons):
-    win.fill((255,255,255))
+def update(win, buttons, background, trees, campfires, animation_step):
+    win.blit(background, (0, 0))
+    win.blit(trees, (0, 0))
+    win.blit(campfires[animation_step], (win.get_width() // 2 - 70, win.get_height() // 2 - 70))
 
-    draw_text(win, 30, "FROSTY'S WRATH", (0,0,0))
+    draw_text(win, 80, "FROSTY'S WRATH", (0,0,0))
 
     for button in buttons:
         button.draw(win)
@@ -60,10 +63,12 @@ def update(win, buttons):
     pygame.display.flip()
 
 
-def play(win):
+def play(win, background, trees, campfires):
     global run
 
-    buttons = [Button(win, 200, "P LAY", 80, 'Snowby.ttf', cont)]
+    buttons = [Button(win, 400, "P LAY", 80, 'Snowby.ttf', cont)]
+    animation_step = 0
+    frame = 0
 
     while run:
         mousepos = pygame.mouse.get_pos()
@@ -75,7 +80,13 @@ def play(win):
                     for button in buttons:
                         button.click(mousepos)
 
+        frame += 1
+        if frame % ANIMATION_RATE == 0:
+            animation_step += 1
+        if animation_step == 3:
+            animation_step = 0
+
         for button in buttons:
             button.hover(mousepos)
 
-        update(win, buttons)
+        update(win, buttons, background, trees, campfires, animation_step)

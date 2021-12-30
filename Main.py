@@ -136,7 +136,7 @@ if __name__ == "__main__":
     while EndPage.retry or first:
         first = False
         EndPage.retry = False
-        TitlePage.play(win)
+        TitlePage.play(win, background, trees, campfires)
         if TitlePage.go_next:
             main()
 
