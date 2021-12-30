@@ -11,8 +11,8 @@ class Player:
     FIRE_REGEN_RATE = 1  # regenerate 1 fireball per second
     MAX_FIREBALLS = 10
     FREEZE_SPEED = 0.5
-    WIDTH = 25
-    HEIGHT = 25
+    WIDTH = 100
+    HEIGHT = 100
     ANIMATION_RATE = 7
 
     def __init__(self, x, y, speed):
@@ -67,26 +67,26 @@ class Player:
             else:
                 win.blit(back[self.animation_step], (self.x - 70, self.y - 70))
         else:
-            if self.direction == "right":
-                if self.shooting:
-                    win.blit(shoot[0], (self.x - 70, self.y - 70))
+            if self.shooting:
+                if mousepos[1] >= self.y-30 and mousepos[1] <= self.y-30 + self.HEIGHT:
+                    if mousepos[0] >= self.x+self.WIDTH:
+                        win.blit(shoot[0], (self.x - 70, self.y - 70))
+                    elif mousepos[0] <= self.x:
+                        win.blit(shoot[1], (self.x - 70, self.y - 70))
                 else:
-                    win.blit(right[0], (self.x - 70, self.y - 70))
-            elif self.direction == "left":
-                if self.shooting:
-                    win.blit(shoot[1], (self.x - 70, self.y - 70))
-                else:
-                    win.blit(left[0], (self.x - 70, self.y - 70))
-            elif self.direction == "front":
-                if self.shooting:
-                    win.blit(shoot[2], (self.x - 70, self.y - 70))
-                else:
-                    win.blit(front[0], (self.x - 70, self.y - 70))
+                    if mousepos[1] > self.y-30+self.HEIGHT:
+                        win.blit(shoot[2], (self.x - 70, self.y - 70))
+                    elif mousepos[1] < self.y-30:
+                        win.blit(shoot[3], (self.x - 70, self.y - 70))
             else:
-                if self.shooting:
-                    win.blit(shoot[3], (self.x - 70, self.y - 70))
+                if self.direction == "right":
+                        win.blit(right[0], (self.x - 70, self.y - 70))
+                elif self.direction == "left":
+                        win.blit(left[0], (self.x - 70, self.y - 70))
+                elif self.direction == "front":
+                        win.blit(front[0], (self.x - 70, self.y - 70))
                 else:
-                    win.blit(back[0], (self.x - 70, self.y - 70))
+                        win.blit(back[0], (self.x - 70, self.y - 70))
 
     def draw_freezing(self, win, image):
         if 250 > self.time_freezing > 0:

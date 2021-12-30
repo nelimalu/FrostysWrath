@@ -105,7 +105,6 @@ def main():
 
         keys = pygame.key.get_pressed()
         mousepos = pygame.mouse.get_pos()
-        print(mousepos)
 
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
