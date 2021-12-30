@@ -1,0 +1,15 @@
+Index: highscore.txt
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>10\r\ndont cheat >:(
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/highscore.txt b/highscore.txt
+--- a/highscore.txt	
++++ b/highscore.txt	
+@@ -1,2 +1,2 @@
+-10
++180
+ dont cheat >:(
+\ No newline at end of file

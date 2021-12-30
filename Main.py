@@ -7,7 +7,6 @@ import Helper
 import random
 import EndPage
 import Boulder
-import time
 
 pygame.mixer.init()
 
@@ -22,6 +21,17 @@ trees = pygame.image.load('assets/Background-trees.png')
 freezing = pygame.image.load('assets/Freezing.png').convert()
 campfires = [pygame.image.load('assets/Campfire-' + str(i) + ".png") for i in range(1, 4)]
 outersloth = pygame.image.load('assets/Outersloth-white.png')
+#right
+character_right = [pygame.image.load('assets/Character-right-' + str(i) + ".png") for i in range(1, 3)]
+#left
+character_left_image1 = pygame.transform.flip(pygame.image.load('assets/Character-right-1.png'), True, False)
+character_left_image2 =  pygame.transform.flip(pygame.image.load('assets/Character-right-2.png'), True, False)
+character_left = [character_left_image1,character_left_image2]
+#front
+character_front = [pygame.image.load('assets/Character-front-' + str(i) + ".png") for i in range(1, 4)]
+#back
+character_back = [pygame.image.load('assets/Character-back-' + str(i) + ".png") for i in range(1, 4)]
+
 
 clock = pygame.time.Clock()
 lost = False
@@ -35,13 +45,12 @@ score = 0
 SCORE_FONT = pygame.font.SysFont('comicsans', 60)
 
 
-def update(player, fireballs, snowballs, campfire, snowmen, boulders, frames):
+def update(player, fireballs, snowballs, campfire, snowmen, boulders, keys):
     win.blit(background, (0, 0))
 
     campfire.draw(win, campfires)
 
     score_text = SCORE_FONT.render(str(score), 1, (255, 255, 0))
-    frames_text = SCORE_FONT.render(str(frames), 1, (255, 255, 0))
 
     for wood in campfire.wood:
         wood.draw(win)
@@ -55,7 +64,7 @@ def update(player, fireballs, snowballs, campfire, snowmen, boulders, frames):
     for x, projectile in enumerate([*fireballs, *snowballs]):
         projectile.draw(win)
 
-    player.draw(win)
+    player.draw(win, keys,character_right, character_left, character_front, character_back)
 
     for snowman in snowmen:
         snowman.draw(win)
@@ -66,8 +75,6 @@ def update(player, fireballs, snowballs, campfire, snowmen, boulders, frames):
         boulder.draw(win, player)
 
     win.blit(score_text, (WIDTH // 2 - score_text.get_width() // 2, HEIGHT - 125))
-
-    win.blit(frames_text, (10, 10))
 
     player.draw_freezing(win, freezing)
     player.draw_fireball_bar(win, WIDTH)
@@ -84,21 +91,14 @@ def main():
     player = Player.Player(WIDTH // 2, 200, 4)
     campfire = Campfire.Campfire(WIDTH // 2, HEIGHT // 2, 100)
 
-    boulders = [Boulder.Boulder(350, 300, 50, 70), Boulder.Boulder(850, 300, 50, 70)]
+    boulders = [Boulder.Boulder(350, 300, 50, 70)]
     snowmen = []
     fireballs = []
     snowballs = []
 
-    frames = []
-
     run = True
     while run:
         clock.tick(60)
-
-        frames.append(time.time())
-        for frame in frames:
-            if frame <= time.time() - 1:
-                frames.remove(frame)
 
         keys = pygame.key.get_pressed()
         mousepos = pygame.mouse.get_pos()
@@ -150,7 +150,7 @@ def main():
 
         campfire.spawn_wood()
         player.update(keys, campfire)
-        update(player, fireballs, snowballs, campfire, snowmen, boulders, len(frames))
+        update(player, fireballs, snowballs, campfire, snowmen, boulders, keys)
 
 
 if __name__ == "__main__":
