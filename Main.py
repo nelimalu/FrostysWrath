@@ -17,6 +17,7 @@ pygame.display.set_caption("Frosty's Wrath")
 background = pygame.image.load('assets/Background-snow.png')
 trees = pygame.image.load('assets/Background-trees.png')
 freezing = pygame.image.load('assets/Freezing.png').convert()
+campfires = [pygame.image.load('assets/Campfire-' + str(i) + ".png") for i in range(1, 4)]
 
 clock = pygame.time.Clock()
 lost = False
@@ -33,7 +34,7 @@ SCORE_FONT = pygame.font.SysFont('comicsans', 60)
 def update(player, fireballs, snowballs, campfire, snowmen):
     win.blit(background, (0, 0))
 
-    campfire.draw(win)
+    campfire.draw(win, campfires)
 
     score_text = SCORE_FONT.render(str(score), 1, (255, 255, 0))
 
@@ -66,7 +67,7 @@ def main():
     global lost
     global score
 
-    player = Player.Player(WIDTH // 2, HEIGHT // 2, 4)
+    player = Player.Player(WIDTH // 2, 200, 4)
     campfire = Campfire.Campfire(WIDTH // 2, HEIGHT // 2, 100)
 
     snowmen = []
@@ -146,5 +147,3 @@ if __name__ == "__main__":
 
 
 pygame.quit()
-
-# make it so that when closemain page acutally lcose

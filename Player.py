@@ -49,25 +49,33 @@ class Player:
                 self.time_gaining = time.time()
 
     def update(self, keys, campfire):
-        self.move(keys, campfire.BORDER)
+        self.move(keys, campfire)
         self.check_freezing(campfire)
         self.check_gain(campfire)
 
-    def move(self, keys, border):
+    def move(self, keys, campfire):
         speed = self.speed - (self.time_freezing * 0.1)
         if speed < 1:
             speed = 1
 
-        if keys[pygame.K_w] or keys[pygame.K_UP]:
-            self.y -= speed
-        if keys[pygame.K_s] or keys[pygame.K_DOWN]:
-            self.y += speed
-        if keys[pygame.K_a] or keys[pygame.K_LEFT]:
-            self.x -= speed
-        if keys[pygame.K_d] or keys[pygame.K_RIGHT]:
-            self.x += speed
+        x = [self.x][:][0]
+        y = [self.y][:][0]
 
-        self.validate_move(border)
+        if keys[pygame.K_w] or keys[pygame.K_UP]:
+            y -= speed
+        if keys[pygame.K_s] or keys[pygame.K_DOWN]:
+            y += speed
+        if keys[pygame.K_a] or keys[pygame.K_LEFT]:
+            x -= speed
+        if keys[pygame.K_d] or keys[pygame.K_RIGHT]:
+            x += speed
+
+        if Helper.get_distance(self.x, y, campfire.x, campfire.y) >= campfire.FIRE_DISTANCE:
+            self.y = y
+        if Helper.get_distance(x, self.y, campfire.x, campfire.y) >= campfire.FIRE_DISTANCE:
+            self.x = x
+
+        self.validate_move(campfire.BORDER)
 
     def validate_move(self, border):
         if self.x - self.WIDTH // 2 < border[0]:
@@ -86,7 +94,7 @@ class Player:
     def shoot(self, endpos):
         if self.fireballs > 0:
             self.fireballs -= 1
-            speed = 4
+            speed = 8
             damage = 15
             size = 5
             return Projectiles.Fireball(self.x, self.y, endpos, speed, damage, size)
