@@ -18,21 +18,21 @@ def draw_text(win, y, text, colour):
 class Button:
     def __init__(self, win, y, string_text, size, font, target):
         self.y = y
-        self.colour = (0, 0, 50)
+        self.colour = (0, 0, 0)
         self.string_text = string_text
         self.target = target
         self.font = pygame.font.Font("assets/" + font, size)
-        self.text = STAT_FONT.render(self.string_text, True, self.colour)
+        self.text = self.font.render(self.string_text, 1, self.colour)
         self.x = (win.get_width() // 2) - (self.text.get_width() // 2)
 
     def hover(self, mousepos):
         if self.x <= mousepos[0] <= self.x + self.text.get_width() and \
                 self.y <= mousepos[1] <= self.text.get_height() + self.y:
-            self.colour = (0, 200, 50)
-            self.text = STAT_FONT.render(self.string_text, True, self.colour)
+            self.colour = (0, 200, 0)
+            self.text = self.font.render(self.string_text, True, self.colour)
         else:
-            self.colour = (0, 0, 50)
-            self.text = STAT_FONT.render(self.string_text, True, self.colour)
+            self.colour = (0, 0, 0)
+            self.text = self.font.render(self.string_text, 1, self.colour)
 
     def click(self, mousepos):
         if self.x <= mousepos[0] <= self.x + self.text.get_width() and \
@@ -52,7 +52,7 @@ def cont():
 def update(win, buttons):
     win.fill((255,255,255))
 
-    draw_text(win, 30, "FROSTY'S WRATH", (0,0,50))
+    draw_text(win, 30, "FROSTY'S WRATH", (0,0,0))
 
     for button in buttons:
         button.draw(win)
@@ -63,7 +63,7 @@ def update(win, buttons):
 def play(win):
     global run
 
-    buttons = [Button(win, 200, "P LAY", 50, 'Snowby.ttf', cont)]
+    buttons = [Button(win, 200, "P LAY", 80, 'Snowby.ttf', cont)]
 
     while run:
         mousepos = pygame.mouse.get_pos()

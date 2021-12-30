@@ -23,12 +23,11 @@ lost = False
 
 # FONTS
 pygame.font.init()
-SCORE_FONT = pygame.font.SysFont('comicsans', 60)
-FONT = pygame.font.SysFont('timesnewroman', 100)
 
 pygame.time.set_timer(pygame.USEREVENT, 200)
 
 score = 0
+SCORE_FONT = pygame.font.SysFont('comicsans', 60)
 
 
 def update(player, fireballs, snowballs, campfire, snowmen):
@@ -132,23 +131,20 @@ def main():
 
 
 if __name__ == "__main__":
+    first = True
+    while EndPage.retry or first:
+        first = False
+        EndPage.retry = False
+        TitlePage.play(win)
+        if TitlePage.go_next:
+            main()
 
-    TitlePage.play(win)
-    if TitlePage.go_next:
-        main()
+        if lost:
+            EndPage.play(win, WIDTH, HEIGHT, clock, score)
+            lost = False
+            TitlePage.go_next = False
 
-    string = "Game Over"
-    game_over_text = FONT.render(string, 1, (0, 128, 0))
-    pygame.gfxdraw.filled_polygon(win, ((0, 0), (0, HEIGHT), (WIDTH, HEIGHT), (WIDTH, 0)), (200, 20, 20, 100))
-    for i in range(len(string)):
-        text = FONT.render(string[i], True, (0, 128, 0))
-        win.blit(text, (300 + (FONT.size(string[:i])[0]), 250))
-        pygame.display.update()
-        clock.tick(2)
-    win.blit(game_over_text, ( WIDTH//2 - 300, HEIGHT//2 - 250))
-    while lost:
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                lost = False
 
 pygame.quit()
+
+# make it so that when closemain page acutally lcose
