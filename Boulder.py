@@ -53,8 +53,8 @@ def get_tripoint(win, points, side):
 def get_pointslist(win, useful_points, angles):
     pointslist = []
     for x, point in enumerate(useful_points):
-        x2 = point[0] + math.sin(angles[x]) * -win.get_width() * 1.5
-        y2 = point[1] + math.cos(angles[x]) * -win.get_height() * 1.5
+        x2 = point[0] + math.sin(angles[x]) * -win.get_width() * 3
+        y2 = point[1] + math.cos(angles[x]) * -win.get_height() * 3
 
         pointslist.append((x2, y2))
         pointslist.append((point[0], point[1]))
@@ -127,6 +127,11 @@ class Boulder:
 
         if math.degrees(self.angles[0]) == -90.0 and math.degrees(self.angles[1]) > 0 and self.side in ["RIGHT", "TOP RIGHT", "BOTTOM RIGHT"]:
             self.angles[0] = math.radians(90.0)
+
+        if math.degrees(self.angles[1]) == -90.0 and math.degrees(self.angles[0]) > 0 and self.side in ["RIGHT", "TOP RIGHT", "BOTTOM RIGHT"]:
+            self.angles[1] = math.radians(90.0)
+
+        print([math.degrees(x) for x in self.angles])
 
         # pygame.draw.polygon(win, (22, 22, 22), make_shadow(win, self.useful_points, self.angles, self.side))
         shadow = make_shadow(win, self.useful_points, self.angles, self.side)

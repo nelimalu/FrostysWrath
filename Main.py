@@ -32,7 +32,10 @@ character_left = [character_left_image1,character_left_image2]
 character_front = [pygame.image.load('assets/Character-front-' + str(i) + ".png") for i in range(1, 4)]
 # back
 character_back = [pygame.image.load('assets/Character-back-' + str(i) + ".png") for i in range(1, 4)]
-
+# shoot
+character_shoot = [pygame.image.load('assets/Character-shoot-' + str(i) + ".png") for i in range(1, 4)]
+character_leftshoot_image = pygame.transform.flip(pygame.image.load('assets/Character-shoot-1.png'), True, False)
+character_shoot.insert(1, character_leftshoot_image)
 
 clock = pygame.time.Clock()
 lost = False
@@ -46,7 +49,7 @@ score = 0
 SCORE_FONT = pygame.font.SysFont('comicsans', 60)
 
 
-def update(player, fireballs, snowballs, campfire, snowmen, boulders, keys):
+def update(player, fireballs, snowballs, campfire, snowmen, boulders, keys, mousepos):
     win.blit(background, (0, 0))
 
     campfire.draw(win, campfires)
@@ -65,8 +68,6 @@ def update(player, fireballs, snowballs, campfire, snowmen, boulders, keys):
     for x, projectile in enumerate([*fireballs, *snowballs]):
         projectile.draw(win)
 
-    player.draw(win, keys,character_right, character_left, character_front, character_back)
-
     for snowman in snowmen:
         snowman.draw(win)
 
@@ -75,7 +76,9 @@ def update(player, fireballs, snowballs, campfire, snowmen, boulders, keys):
     for boulder in boulders:
         boulder.draw(win, player)
 
-    pygame.draw.circle(win, (0,0,255), (player.x, player.y), 5)
+    player.draw(win, keys, mousepos, character_right, character_left, character_front, character_back, character_shoot)
+
+    pygame.draw.circle(win, (0, 0, 255), (player.x, player.y), 5)
     pygame.draw.circle(win, (0, 0, 255), (player.x + player.WIDTH, player.y), 5)
     pygame.draw.circle(win, (0, 0, 255), (player.x, player.y + player.HEIGHT), 5)
     pygame.draw.circle(win, (0, 0, 255), (player.x + player.WIDTH, player.y + player.HEIGHT), 5)
@@ -117,7 +120,6 @@ def main():
                     fireball = player.shoot(mousepos)
                     if fireball is not None:
                         fireballs.append(fireball)
-                    # campfire.take_damage(5)
 
         for fireball in fireballs:
             fireball.move()
@@ -155,8 +157,9 @@ def main():
             snowman.move()
 
         campfire.spawn_wood()
+
         player.update(keys, campfire, boulders)
-        update(player, fireballs, snowballs, campfire, snowmen, boulders, keys)
+        update(player, fireballs, snowballs, campfire, snowmen, boulders, keys, mousepos)
 
 
 if __name__ == "__main__":

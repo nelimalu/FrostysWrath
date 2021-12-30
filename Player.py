@@ -4,6 +4,7 @@ import Projectiles
 import Helper
 import time
 
+
 # update
 
 
@@ -27,15 +28,18 @@ class Player:
         self.ratio = self.MAX_FIREBALLS / self.bar_length
         self.animation_step_side = 0
         self.animation_step = 0
-        self.foot = 1
         self.frame = 0
         self.direction = "front"
+        self.shooting = False
 
-    def draw(self, win, keys,right, left, front, back):
+    def draw(self, win, keys, mousepos, right, left, front, back, shoot):
         self.frame += 1
         if self.frame % self.ANIMATION_RATE == 0:
             self.animation_step_side += 1
             self.animation_step += 1
+        if self.frame % (self.ANIMATION_RATE * 3) == 0:
+            if self.shooting:
+                self.shooting = False
         if self.animation_step_side == 2:
             self.animation_step_side = 0
         if self.animation_step == 3:
@@ -45,22 +49,46 @@ class Player:
         x_offset = 35
 
         if keys[pygame.K_d] or keys[pygame.K_RIGHT]:
-            win.blit(right[self.animation_step_side], (self.x - x_offset, self.y - y_offset))
-        elif keys[pygame.K_a] or keys[pygame.K_LEFT]:
-            win.blit(left[self.animation_step_side], (self.x - x_offset, self.y - y_offset))
-        elif keys[pygame.K_s] or keys[pygame.K_DOWN]:
-            win.blit(front[self.animation_step], (self.x - x_offset, self.y - y_offset))
-        elif keys[pygame.K_w] or keys[pygame.K_UP]:
-            win.blit(back[self.animation_step], (self.x - x_offset, self.y - y_offset))
-        else:
-            if self.direction == "right":
-                win.blit(right[0], (self.x - x_offset, self.y - y_offset))
-            elif self.direction == "left":
-                win.blit(left[0], (self.x - x_offset, self.y - y_offset))
-            elif self.direction == "front":
-                win.blit(front[0], (self.x - x_offset, self.y - y_offset))
+            if self.shooting:
+                win.blit(shoot[0], (self.x - x_offset, self.y - y_offset))
             else:
-                win.blit(back[0], (self.x - x_offset, self.y - y_offset))
+                win.blit(right[self.animation_step_side], (self.x - x_offset, self.y - y_offset))
+        elif keys[pygame.K_a] or keys[pygame.K_LEFT]:
+            if self.shooting:
+                win.blit(shoot[1], (self.x - x_offset, self.y - y_offset))
+            else:
+                win.blit(left[self.animation_step_side], (self.x - x_offset, self.y - y_offset))
+        elif keys[pygame.K_s] or keys[pygame.K_DOWN]:
+            if self.shooting:
+                win.blit(shoot[2], (self.x - x_offset, self.y - y_offset))
+            else:
+                win.blit(front[self.animation_step], (self.x - x_offset, self.y - y_offset))
+        elif keys[pygame.K_w] or keys[pygame.K_UP]:
+            if self.shooting:
+                win.blit(shoot[3], (self.x - x_offset, self.y - y_offset))
+            else:
+                win.blit(back[self.animation_step], (self.x - x_offset, self.y - y_offset))
+        else:
+            if self.shooting:
+                if self.y - 30 <= mousepos[1] <= self.y - 30 + self.HEIGHT:
+                    if mousepos[0] >= self.x + self.WIDTH:
+                        win.blit(shoot[0], (self.x - x_offset, self.y - y_offset))
+                    elif mousepos[0] <= self.x:
+                        win.blit(shoot[1], (self.x - x_offset, self.y - y_offset))
+                else:
+                    if mousepos[1] > self.y - 30 + self.HEIGHT:
+                        win.blit(shoot[2], (self.x - x_offset, self.y - y_offset))
+                    elif mousepos[1] < self.y - 30:
+                        win.blit(shoot[3], (self.x - x_offset, self.y - y_offset))
+            else:
+                if self.direction == "right":
+                    win.blit(right[0], (self.x - x_offset, self.y - y_offset))
+                elif self.direction == "left":
+                    win.blit(left[0], (self.x - x_offset, self.y - y_offset))
+                elif self.direction == "front":
+                    win.blit(front[0], (self.x - x_offset, self.y - y_offset))
+                else:
+                    win.blit(back[0], (self.x - x_offset, self.y - y_offset))
 
     def draw_freezing(self, win, image):
         if 250 > self.time_freezing > 0:
@@ -108,17 +136,22 @@ class Player:
             x += speed
             self.direction = "right"
 
-        if Helper.get_distance(self.x, y, campfire.x, campfire.y) >= campfire.FIRE_DISTANCE:
-            self.y = y
-        if Helper.get_distance(x, self.y, campfire.x, campfire.y) >= campfire.FIRE_DISTANCE:
-            self.x = x
+        move_x = True
+        move_y = True
+        if not Helper.get_distance(self.x, y, campfire.x, campfire.y) >= campfire.FIRE_DISTANCE:
+            move_x = False
+        if not Helper.get_distance(x, self.y, campfire.x, campfire.y) >= campfire.FIRE_DISTANCE:
+            move_y = False
 
         for boulder in boulders:
-            if Helper.collide(boulder.x, boulder.y, boulder.width, boulder.height, self.x, self.y) or \
-                    Helper.collide(boulder.x, boulder.y, boulder.width, boulder.height, self.x - 100, self.y) or \
-                    Helper.collide(boulder.x, boulder.y, boulder.width, boulder.height, self.x, self.y - 100) or \
-                    Helper.collide(boulder.x, boulder.y, boulder.width, boulder.height, self.x - 100, self.y - 100):
-                print("collide")
+            if pygame.Rect((boulder.x - 4, boulder.y - 4, boulder.width + 12, boulder.height + 12)).colliderect((x, y, self.WIDTH, self.HEIGHT)):
+                move_x = False
+                move_y = False
+
+        if move_x:
+            self.x = x
+        if move_y:
+            self.y = y
 
         self.validate_move(campfire.BORDER)
 
@@ -133,14 +166,14 @@ class Player:
             self.y = border[3] - self.HEIGHT // 2
 
     def draw_fireball_bar(self, win, width):
-        pygame.draw.rect(win, (255,165,0), (width//2-250, 600,self.fireballs/self.ratio,25))
-        pygame.draw.rect(win, (0,0,0), (width//2-250, 600,self.bar_length,25),5)
+        pygame.draw.rect(win, (255, 165, 0), (width // 2 - 250, 600, self.fireballs / self.ratio, 25))
+        pygame.draw.rect(win, (0, 0, 0), (width // 2 - 250, 600, self.bar_length, 25), 5)
 
     def shoot(self, endpos):
         if self.fireballs > 0:
             self.fireballs -= 1
             speed = 8
             damage = 15
-            # self.direction = "shoot"
+            self.shooting = True
             size = 5
             return Projectiles.Fireball(self.x, self.y, endpos, speed, damage, size)
