@@ -6,6 +6,7 @@ import TitlePage
 import Helper
 import random
 import EndPage
+import Boulder
 
 pygame.mixer.init()
 
@@ -33,7 +34,7 @@ score = 0
 SCORE_FONT = pygame.font.SysFont('comicsans', 60)
 
 
-def update(player, fireballs, snowballs, campfire, snowmen):
+def update(player, fireballs, snowballs, campfire, snowmen, boulders):
     win.blit(background, (0, 0))
 
     campfire.draw(win, campfires)
@@ -57,9 +58,12 @@ def update(player, fireballs, snowballs, campfire, snowmen):
     for snowman in snowmen:
         snowman.draw(win)
 
+    for boulder in boulders:
+        boulder.draw(win, player)
+
     win.blit(trees, (0, 0))
 
-    win.blit(score_text, (WIDTH//2 - score_text.get_width() // 2, HEIGHT-125))
+    win.blit(score_text, (WIDTH // 2 - score_text.get_width() // 2, HEIGHT - 125))
 
     player.draw_freezing(win, freezing)
     player.draw_fireball_bar(win, WIDTH)
@@ -76,6 +80,7 @@ def main():
     player = Player.Player(WIDTH // 2, 200, 4)
     campfire = Campfire.Campfire(WIDTH // 2, HEIGHT // 2, 100)
 
+    boulders = [Boulder.Boulder(350, 300, 50, 70)]
     snowmen = []
     fireballs = []
     snowballs = []
@@ -134,7 +139,7 @@ def main():
 
         campfire.spawn_wood()
         player.update(keys, campfire)
-        update(player, fireballs, snowballs, campfire, snowmen)
+        update(player, fireballs, snowballs, campfire, snowmen, boulders)
 
 
 if __name__ == "__main__":

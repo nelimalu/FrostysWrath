@@ -1,6 +1,5 @@
 import math
-
-# update
+from shapely.geometry import Point, Polygon
 
 
 def get_distance(x1, y1, x2, y2):
@@ -32,3 +31,11 @@ def find_angle(x1, y1, x2, y2):
     # remember in a graph with four quadrants, ball is 0,0
 
     return angle - math.radians(90)
+
+
+def point_in_polygon(points, location):
+    point = Point(location[0], location[1])
+    polygon = Polygon([points[0], points[1], points[3], points[2]])
+    if polygon.contains(point):
+        return True
+    return False
