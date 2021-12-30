@@ -27,37 +27,66 @@ class Player:
         self.ratio = self.MAX_FIREBALLS / self.bar_length
         self.animation_step_side = 0
         self.animation_step = 0
-        self.foot = 1
         self.frame = 0
         self.direction = "front"
+        self.shooting = False
 
-    def draw(self, win, keys,right, left, front, back):
+    def draw(self, win, keys, mousepos, right, left, front, back, shoot):
         self.frame += 1
         if self.frame % self.ANIMATION_RATE == 0:
             self.animation_step_side += 1
             self.animation_step += 1
+            if self.shooting:
+                self.shooting = False
+        if self.frame % (self.ANIMATION_RATE*5) == 0:
+            if self.shooting:
+                self.shooting = False
         if self.animation_step_side == 2:
             self.animation_step_side = 0
         if self.animation_step == 3:
             self.animation_step = 0
 
         if keys[pygame.K_d] or keys[pygame.K_RIGHT]:
-            win.blit(right[self.animation_step_side], (self.x - 70, self.y - 70))
+            if self.shooting:
+                win.blit(shoot[0], (self.x - 70, self.y - 70))
+            else:
+                win.blit(right[self.animation_step_side], (self.x - 70, self.y - 70))
         elif keys[pygame.K_a] or keys[pygame.K_LEFT]:
-            win.blit(left[self.animation_step_side], (self.x - 70, self.y - 70))
+            if self.shooting:
+                win.blit(shoot[1], (self.x - 70, self.y - 70))
+            else:
+                win.blit(left[self.animation_step_side], (self.x - 70, self.y - 70))
         elif keys[pygame.K_s] or keys[pygame.K_DOWN]:
-            win.blit(front[self.animation_step], (self.x - 70, self.y - 70))
+            if self.shooting:
+                win.blit(shoot[2], (self.x - 70, self.y - 70))
+            else:
+                win.blit(front[self.animation_step], (self.x - 70, self.y - 70))
         elif keys[pygame.K_w] or keys[pygame.K_UP]:
-            win.blit(back[self.animation_step], (self.x - 70, self.y - 70))
+            if self.shooting:
+                win.blit(shoot[3], (self.x - 70, self.y - 70))
+            else:
+                win.blit(back[self.animation_step], (self.x - 70, self.y - 70))
         else:
             if self.direction == "right":
-                win.blit(right[0], (self.x - 70, self.y - 70))
+                if self.shooting:
+                    win.blit(shoot[0], (self.x - 70, self.y - 70))
+                else:
+                    win.blit(right[0], (self.x - 70, self.y - 70))
             elif self.direction == "left":
-                win.blit(left[0], (self.x - 70, self.y - 70))
+                if self.shooting:
+                    win.blit(shoot[1], (self.x - 70, self.y - 70))
+                else:
+                    win.blit(left[0], (self.x - 70, self.y - 70))
             elif self.direction == "front":
-                win.blit(front[0], (self.x - 70, self.y - 70))
+                if self.shooting:
+                    win.blit(shoot[2], (self.x - 70, self.y - 70))
+                else:
+                    win.blit(front[0], (self.x - 70, self.y - 70))
             else:
-                win.blit(back[0], (self.x - 70, self.y - 70))
+                if self.shooting:
+                    win.blit(shoot[3], (self.x - 70, self.y - 70))
+                else:
+                    win.blit(back[0], (self.x - 70, self.y - 70))
 
     def draw_freezing(self, win, image):
         if 250 > self.time_freezing > 0:
@@ -131,6 +160,6 @@ class Player:
             self.fireballs -= 1
             speed = 8
             damage = 15
-            # self.direction = "shoot"
+            self.shooting = True
             size = 5
             return Projectiles.Fireball(self.x, self.y, endpos, speed, damage, size)

@@ -31,7 +31,10 @@ character_left = [character_left_image1,character_left_image2]
 character_front = [pygame.image.load('assets/Character-front-' + str(i) + ".png") for i in range(1, 4)]
 #back
 character_back = [pygame.image.load('assets/Character-back-' + str(i) + ".png") for i in range(1, 4)]
-
+#shoot
+character_shoot = [pygame.image.load('assets/Character-shoot-' + str(i) + ".png") for i in range(1, 4)]
+character_leftshoot_image = pygame.transform.flip(pygame.image.load('assets/Character-shoot-1.png'), True, False)
+character_shoot.insert(1, character_leftshoot_image)
 
 clock = pygame.time.Clock()
 lost = False
@@ -45,7 +48,7 @@ score = 0
 SCORE_FONT = pygame.font.SysFont('comicsans', 60)
 
 
-def update(player, fireballs, snowballs, campfire, snowmen, boulders, keys):
+def update(player, fireballs, snowballs, campfire, snowmen, boulders, keys, mousepos):
     win.blit(background, (0, 0))
 
     campfire.draw(win, campfires)
@@ -64,7 +67,7 @@ def update(player, fireballs, snowballs, campfire, snowmen, boulders, keys):
     for x, projectile in enumerate([*fireballs, *snowballs]):
         projectile.draw(win)
 
-    player.draw(win, keys,character_right, character_left, character_front, character_back)
+    player.draw(win, keys, mousepos, character_right, character_left, character_front, character_back, character_shoot)
 
     for snowman in snowmen:
         snowman.draw(win)
@@ -102,6 +105,7 @@ def main():
 
         keys = pygame.key.get_pressed()
         mousepos = pygame.mouse.get_pos()
+        print(mousepos)
 
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -150,7 +154,7 @@ def main():
 
         campfire.spawn_wood()
         player.update(keys, campfire)
-        update(player, fireballs, snowballs, campfire, snowmen, boulders, keys)
+        update(player, fireballs, snowballs, campfire, snowmen, boulders, keys, mousepos)
 
 
 if __name__ == "__main__":
