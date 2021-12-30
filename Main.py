@@ -21,6 +21,17 @@ trees = pygame.image.load('assets/Background-trees.png')
 freezing = pygame.image.load('assets/Freezing.png').convert()
 campfires = [pygame.image.load('assets/Campfire-' + str(i) + ".png") for i in range(1, 4)]
 outersloth = pygame.image.load('assets/Outersloth-white.png')
+#right
+character_right = [pygame.image.load('assets/Character-right-' + str(i) + ".png") for i in range(1, 3)]
+#left
+character_left_image1 = pygame.transform.flip(pygame.image.load('assets/Character-right-1.png'), True, False)
+character_left_image2 =  pygame.transform.flip(pygame.image.load('assets/Character-right-2.png'), True, False)
+character_left = [character_left_image1,character_left_image2]
+#front
+character_front = [pygame.image.load('assets/Character-front-' + str(i) + ".png") for i in range(1, 4)]
+#back
+character_back = [pygame.image.load('assets/Character-back-' + str(i) + ".png") for i in range(1, 4)]
+
 
 clock = pygame.time.Clock()
 lost = False
@@ -34,7 +45,7 @@ score = 0
 SCORE_FONT = pygame.font.SysFont('comicsans', 60)
 
 
-def update(player, fireballs, snowballs, campfire, snowmen, boulders):
+def update(player, fireballs, snowballs, campfire, snowmen, boulders, keys):
     win.blit(background, (0, 0))
 
     campfire.draw(win, campfires)
@@ -53,7 +64,7 @@ def update(player, fireballs, snowballs, campfire, snowmen, boulders):
     for x, projectile in enumerate([*fireballs, *snowballs]):
         projectile.draw(win)
 
-    player.draw(win)
+    player.draw(win, keys,character_right, character_left, character_front, character_back)
 
     for snowman in snowmen:
         snowman.draw(win)
@@ -139,7 +150,7 @@ def main():
 
         campfire.spawn_wood()
         player.update(keys, campfire)
-        update(player, fireballs, snowballs, campfire, snowmen, boulders)
+        update(player, fireballs, snowballs, campfire, snowmen, boulders, keys)
 
 
 if __name__ == "__main__":

@@ -1,5 +1,5 @@
 import math
-from shapely.geometry import Point, Polygon
+# from shapely.geometry import Point, Polygon
 
 
 def get_distance(x1, y1, x2, y2):
