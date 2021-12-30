@@ -36,9 +36,7 @@ class Player:
         if self.frame % self.ANIMATION_RATE == 0:
             self.animation_step_side += 1
             self.animation_step += 1
-            if self.shooting:
-                self.shooting = False
-        if self.frame % (self.ANIMATION_RATE*5) == 0:
+        if self.frame % (self.ANIMATION_RATE*3) == 0:
             if self.shooting:
                 self.shooting = False
         if self.animation_step_side == 2:

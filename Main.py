@@ -36,6 +36,8 @@ character_shoot = [pygame.image.load('assets/Character-shoot-' + str(i) + ".png"
 character_leftshoot_image = pygame.transform.flip(pygame.image.load('assets/Character-shoot-1.png'), True, False)
 character_shoot.insert(1, character_leftshoot_image)
 
+
+
 clock = pygame.time.Clock()
 lost = False
 
@@ -96,6 +98,9 @@ def main():
 
     boulders = [Boulder.Boulder(350, 300, 50, 70)]
     snowmen = []
+    first_snowmen = []
+    second_snowmen = []
+    third_snowmen = []
     fireballs = []
     snowballs = []
 
@@ -111,6 +116,7 @@ def main():
                 run = False
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if event.button == pygame.BUTTON_LEFT:
+                    print(mousepos)
                     fireball = player.shoot(mousepos)
                     if fireball is not None:
                         fireballs.append(fireball)
