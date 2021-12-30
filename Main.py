@@ -21,15 +21,16 @@ trees = pygame.image.load('assets/Background-trees.png')
 freezing = pygame.image.load('assets/Freezing.png').convert()
 campfires = [pygame.image.load('assets/Campfire-' + str(i) + ".png") for i in range(1, 4)]
 outersloth = pygame.image.load('assets/Outersloth-white.png')
-#right
+
+# right
 character_right = [pygame.image.load('assets/Character-right-' + str(i) + ".png") for i in range(1, 3)]
-#left
+# left
 character_left_image1 = pygame.transform.flip(pygame.image.load('assets/Character-right-1.png'), True, False)
 character_left_image2 =  pygame.transform.flip(pygame.image.load('assets/Character-right-2.png'), True, False)
 character_left = [character_left_image1,character_left_image2]
-#front
+# front
 character_front = [pygame.image.load('assets/Character-front-' + str(i) + ".png") for i in range(1, 4)]
-#back
+# back
 character_back = [pygame.image.load('assets/Character-back-' + str(i) + ".png") for i in range(1, 4)]
 
 
@@ -74,6 +75,11 @@ def update(player, fireballs, snowballs, campfire, snowmen, boulders, keys):
     for boulder in boulders:
         boulder.draw(win, player)
 
+    pygame.draw.circle(win, (0,0,255), (player.x, player.y), 5)
+    pygame.draw.circle(win, (0, 0, 255), (player.x + player.WIDTH, player.y), 5)
+    pygame.draw.circle(win, (0, 0, 255), (player.x, player.y + player.HEIGHT), 5)
+    pygame.draw.circle(win, (0, 0, 255), (player.x + player.WIDTH, player.y + player.HEIGHT), 5)
+
     win.blit(score_text, (WIDTH // 2 - score_text.get_width() // 2, HEIGHT - 125))
 
     player.draw_freezing(win, freezing)
@@ -91,7 +97,7 @@ def main():
     player = Player.Player(WIDTH // 2, 200, 4)
     campfire = Campfire.Campfire(WIDTH // 2, HEIGHT // 2, 100)
 
-    boulders = [Boulder.Boulder(350, 300, 50, 70)]
+    boulders = [Boulder.Boulder(300, 300, 70, 120)]
     snowmen = []
     fireballs = []
     snowballs = []
@@ -149,7 +155,7 @@ def main():
             snowman.move()
 
         campfire.spawn_wood()
-        player.update(keys, campfire)
+        player.update(keys, campfire, boulders)
         update(player, fireballs, snowballs, campfire, snowmen, boulders, keys)
 
 

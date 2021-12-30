@@ -41,23 +41,26 @@ class Player:
         if self.animation_step == 3:
             self.animation_step = 0
 
+        y_offset = 70
+        x_offset = 35
+
         if keys[pygame.K_d] or keys[pygame.K_RIGHT]:
-            win.blit(right[self.animation_step_side], (self.x - 70, self.y - 70))
+            win.blit(right[self.animation_step_side], (self.x - x_offset, self.y - y_offset))
         elif keys[pygame.K_a] or keys[pygame.K_LEFT]:
-            win.blit(left[self.animation_step_side], (self.x - 70, self.y - 70))
+            win.blit(left[self.animation_step_side], (self.x - x_offset, self.y - y_offset))
         elif keys[pygame.K_s] or keys[pygame.K_DOWN]:
-            win.blit(front[self.animation_step], (self.x - 70, self.y - 70))
+            win.blit(front[self.animation_step], (self.x - x_offset, self.y - y_offset))
         elif keys[pygame.K_w] or keys[pygame.K_UP]:
-            win.blit(back[self.animation_step], (self.x - 70, self.y - 70))
+            win.blit(back[self.animation_step], (self.x - x_offset, self.y - y_offset))
         else:
             if self.direction == "right":
-                win.blit(right[0], (self.x - 70, self.y - 70))
+                win.blit(right[0], (self.x - x_offset, self.y - y_offset))
             elif self.direction == "left":
-                win.blit(left[0], (self.x - 70, self.y - 70))
+                win.blit(left[0], (self.x - x_offset, self.y - y_offset))
             elif self.direction == "front":
-                win.blit(front[0], (self.x - 70, self.y - 70))
+                win.blit(front[0], (self.x - x_offset, self.y - y_offset))
             else:
-                win.blit(back[0], (self.x - 70, self.y - 70))
+                win.blit(back[0], (self.x - x_offset, self.y - y_offset))
 
     def draw_freezing(self, win, image):
         if 250 > self.time_freezing > 0:
@@ -79,12 +82,12 @@ class Player:
                 self.fireballs += 1 if self.fireballs < self.MAX_FIREBALLS else 0
                 self.time_gaining = time.time()
 
-    def update(self, keys, campfire):
-        self.move(keys, campfire)
+    def update(self, keys, campfire, boulders):
+        self.move(keys, campfire, boulders)
         self.check_freezing(campfire)
         self.check_gain(campfire)
 
-    def move(self, keys, campfire):
+    def move(self, keys, campfire, boulders):
         speed = self.speed - (self.time_freezing * 0.1)
         if speed < 1:
             speed = 1
@@ -109,6 +112,13 @@ class Player:
             self.y = y
         if Helper.get_distance(x, self.y, campfire.x, campfire.y) >= campfire.FIRE_DISTANCE:
             self.x = x
+
+        for boulder in boulders:
+            if Helper.collide(boulder.x, boulder.y, boulder.width, boulder.height, self.x, self.y) or \
+                    Helper.collide(boulder.x, boulder.y, boulder.width, boulder.height, self.x - 100, self.y) or \
+                    Helper.collide(boulder.x, boulder.y, boulder.width, boulder.height, self.x, self.y - 100) or \
+                    Helper.collide(boulder.x, boulder.y, boulder.width, boulder.height, self.x - 100, self.y - 100):
+                print("collide")
 
         self.validate_move(campfire.BORDER)
 
