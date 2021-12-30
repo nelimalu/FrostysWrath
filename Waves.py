@@ -6,6 +6,8 @@ class WavePart:
         self.delay_between_spawn = delay_between_spawn
 
 
+# todo add a way to specify music for a wave
+
 waves = [
     [WavePart(1, 10, 0, 0.5)],
     [WavePart(1, 20, 0, 0.1), WavePart(2, 5, 10, 10)]

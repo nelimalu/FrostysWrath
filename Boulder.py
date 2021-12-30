@@ -2,6 +2,12 @@ import pygame
 import pygame.gfxdraw
 import math
 import Helper
+import cv2
+import numpy as np
+
+background = cv2.imread(r"assets/Background-shadow.png", 0)
+
+GRAPHICS = True
 
 
 def get_relative_side(obstacle, pos):
@@ -49,6 +55,7 @@ def get_pointslist(win, useful_points, angles):
     for x, point in enumerate(useful_points):
         x2 = point[0] + math.sin(angles[x]) * -win.get_width() * 1.5
         y2 = point[1] + math.cos(angles[x]) * -win.get_height() * 1.5
+
         pointslist.append((x2, y2))
         pointslist.append((point[0], point[1]))
     return pointslist
@@ -86,11 +93,31 @@ class Boulder:
         }
 
     def draw(self, win, player):
-        self.draw_shadow(win, player)
+        self.shadow(win, player)
+        self.draw_shadow(win)
         pygame.draw.rect(win, (255,0,0), (self.x, self.y, self.width, self.height))
+
         # print(win.copy())
 
-    def draw_shadow(self, win, player):
+    def draw_shadow(self, win):
+        pointslist = [self.pointslist[0], self.pointslist[1], self.pointslist[3], self.pointslist[2]]
+
+        if GRAPHICS:
+            mask = np.ones(background.shape, dtype=np.uint8)
+            mask.fill(255)
+
+            roi_corners = np.array([pointslist], dtype=np.int32)
+            cv2.fillPoly(mask, roi_corners, 0)
+
+            masked_image = cv2.bitwise_or(background, mask)
+            cv2.imwrite('assets/new_masked_image.png', masked_image)
+            surf = pygame.image.load('assets/new_masked_image.png')
+            surf.set_colorkey((255, 255, 255))
+            win.blit(surf, (0, 0))
+        else:
+            pygame.draw.polygon(win, (0,0,0), self.pointslist)
+
+    def shadow(self, win, player):
         self.playerdist = -Helper.get_distance(self.x, self.y, player.x, player.y)
         self.side = get_relative_side(self, (player.x, player.y))
         self.useful_points = self.pairs[self.side]
@@ -98,10 +125,10 @@ class Boulder:
         for point in self.useful_points:
             self.angles.append(Helper.find_angle(point[0], point[1], player.x, player.y))
 
-        if math.degrees(self.angles[0]) == -90.0 and math.degrees(self.angles[1]) > 0:
+        if math.degrees(self.angles[0]) == -90.0 and math.degrees(self.angles[1]) > 0 and self.side in ["RIGHT", "TOP RIGHT", "BOTTOM RIGHT"]:
             self.angles[0] = math.radians(90.0)
 
         # pygame.draw.polygon(win, (22, 22, 22), make_shadow(win, self.useful_points, self.angles, self.side))
         shadow = make_shadow(win, self.useful_points, self.angles, self.side)
-        pygame.gfxdraw.filled_polygon(win, shadow[0], (0, 0, 0, 100))
+        # pygame.gfxdraw.filled_polygon(win, shadow[0], (0, 0, 0, 100))
         self.pointslist = shadow[1]

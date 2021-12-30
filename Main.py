@@ -72,10 +72,10 @@ def update(player, fireballs, snowballs, campfire, snowmen, boulders, keys, mous
     for snowman in snowmen:
         snowman.draw(win)
 
+    win.blit(trees, (0, 0))
+
     for boulder in boulders:
         boulder.draw(win, player)
-
-    win.blit(trees, (0, 0))
 
     win.blit(score_text, (WIDTH // 2 - score_text.get_width() // 2, HEIGHT - 125))
 
