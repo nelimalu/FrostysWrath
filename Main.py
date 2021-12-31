@@ -79,7 +79,7 @@ score = 0
 SCORE_FONT = pygame.font.SysFont('comicsans', 60)
 
 
-def update(player, fireballs, small_snowballs, big_snowballs,campfire, first_snowmen, second_snowmen, third_snowmen,secondsnowman_shooting,boulders, keys, mousepos):
+def update(player, fireballs, small_snowballs, big_snowballs,campfire, first_snowmen, second_snowmen, third_snowmen,secondsnowman_shooting,thirdsnowman_shooting,boulders, keys, mousepos):
     win.blit(background, (0, 0))
 
     campfire.draw(win, campfires)
@@ -99,12 +99,17 @@ def update(player, fireballs, small_snowballs, big_snowballs,campfire, first_sno
         fireball.draw(win, FIREBALL)
     for snowball in small_snowballs:
         snowball.draw(win, SMALL_SNOWBALL)
+    for snowball in big_snowballs:
+        snowball.draw(win, BIG_SNOWBALL)
 
     for firstsnowman in first_snowmen:
         firstsnowman.draw(win, first_snomwan, secondsnowman_shooting)
 
     for secondsnowman in second_snowmen:
         secondsnowman.draw(win, second_snowman, secondsnowman_shooting)
+
+    for thirdsnowman in third_snowmen:
+        thirdsnowman.draw(win, third_snowman, thirdsnowman_shooting)
 
     win.blit(trees, (0, 0))
 
@@ -201,6 +206,16 @@ def main():
             if snowball.is_out_of_bounds(WIDTH, HEIGHT):
                 small_snowballs.remove(snowball)
 
+        for snowball in big_snowballs:
+            snowball.move()
+            if snowball.hit_goal():
+                if snowball.goal == campfire:
+                    campfire.take_damage(snowball.damage)
+                    big_snowballs.remove(snowball)
+
+            if snowball.is_out_of_bounds(WIDTH, HEIGHT):
+                big_snowballs.remove(snowball)
+
         if campfire.health <= 0 or player.time_freezing > 250:
             lost = True
             run = False
@@ -246,10 +261,16 @@ def main():
                 small_snowballs.append(snowball)
             secondsnowman.move(campfire, boulders)
 
+        for thirdsnowman in third_snowmen:
+            snowball = thirdsnowman.shoot()
+            if snowball is not None:
+                big_snowballs.append(snowball)
+            thirdsnowman.move(campfire, boulders)
+
         campfire.spawn_wood()
 
         player.update(keys, campfire, boulders)
-        update(player, fireballs, small_snowballs, big_snowballs,campfire, first_snowmen, second_snowmen, third_snowmen,second_snowman_shooting,boulders, keys, mousepos)
+        update(player, fireballs, small_snowballs, big_snowballs,campfire, first_snowmen, second_snowmen, third_snowmen, second_snowman_shooting, third_snowman_shooting,boulders, keys, mousepos)
 
 
 if __name__ == "__main__":

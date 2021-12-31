@@ -164,7 +164,36 @@ class second_snowman(Snowman):
 
 
 class third_snowman(Snowman):
-    pass
+    def draw(self, win, thirdsnowman, thirdsnowmanshooting):
+        self.frame += 1
+
+        if self.frame % (self.ANIMATION_RATE * 3) == 0:
+            if self.shooting:
+                self.shooting = False
+
+        if self.shooting:
+            if self.y <= 200:
+                win.blit(thirdsnowmanshooting[1], (self.x - self.WIDTH// 2 - 70, self.y - self.HEIGHT))
+            elif self.y >= 450:
+                win.blit(thirdsnowmanshooting[0], (self.x - self.WIDTH// 2 - 70, self.y - self.HEIGHT))
+            elif self.x <= 450:
+                win.blit(thirdsnowmanshooting[2], (self.x - self.WIDTH// 2 - 70, self.y - self.HEIGHT))
+            else:
+                win.blit(thirdsnowmanshooting[3], (self.x - self.WIDTH// 2 - 70, self.y - self.HEIGHT))
+
+        else:
+            if self.x >= 150 and self.x <= 900 and (self.y < 250 or self.y > 400):
+                if self.y <= 325:
+                    win.blit(thirdsnowman[1], (self.x - self.WIDTH// 2 - 70, self.y - self.HEIGHT))
+                else:
+                    win.blit(thirdsnowman[0], (self.x - self.WIDTH // 2 - 70, self.y - self.HEIGHT))
+            else:
+                if self.x <= 550:
+                    win.blit(thirdsnowman[2], (self.x - self.WIDTH // 2 - 70, self.y - self.HEIGHT))
+                else:
+                    win.blit(thirdsnowman[3], (self.x - self.WIDTH // 2 - 70, self.y - self.HEIGHT))
+        #pygame.draw.rect(win, (0, 0, 0), (self.x - self.WIDTH // 2, self.y - self.HEIGHT // 2, self.WIDTH, self.HEIGHT))
+
 
 
 def get_snowman_location(width, height, border):
