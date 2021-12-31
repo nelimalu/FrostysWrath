@@ -53,3 +53,8 @@ class Fireball(Projectile):
             y = snowman.y - (snowman.HEIGHT // 2)
             if Helper.collide(x, y, snowman.WIDTH, snowman.HEIGHT, self.x, self.y):
                 return snowman
+
+    def hit_boulder(self, boulders):
+        for boulder in boulders:
+            if Helper.collide(boulder.x, boulder.y, boulder.width, boulder.height, self.x, self.y):
+                return boulder

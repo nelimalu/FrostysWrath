@@ -108,6 +108,7 @@ class second_snowman(Snowman):
 class third_snowman(Snowman):
     pass
 
+
 def get_snowman_location(width, height, border):
     x = random.randint(0, width)
     y = random.randint(0, height)
@@ -119,23 +120,25 @@ def get_snowman_location(width, height, border):
 
 
 def spawn_firstsnowman(width, height, campfire):
-    health = 10
+    health = 1
     speed = 2
     damage = 1
     throwing_range = 200
     points = 5
     return first_snowman(get_snowman_location(width, height, campfire.BORDER), campfire, health, speed, damage, throwing_range, points)
 
+
 def spawn_secondsnowman(width, height, campfire):
-    health = 15
+    health = 1
     speed = 2
     damage = 3
     throwing_range = 200
     points = 10
     return second_snowman(get_snowman_location(width, height, campfire.BORDER), campfire, health, speed, damage, throwing_range, points)
 
+
 def spawn_thirdsnowman(width, height, campfire):
-    health = 10
+    health = 1
     speed = 3
     damage = 6
     throwing_range = 200

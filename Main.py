@@ -119,7 +119,6 @@ def main():
     campfire = Campfire.Campfire(WIDTH // 2, HEIGHT // 2, 100)
 
     boulders = [Boulder.Boulder(300, 300, 105, 70), Boulder.Boulder(700, 250, 105, 70)]
-    snowmen = []
     first_snowmen = []
     second_snowmen = []
     third_snowmen = []
@@ -152,13 +151,8 @@ def main():
                 if hit.is_dead():
                     first_snowmen.remove(hit)
                     fireballs.remove(fireball)
-            hit = fireball.hit_snowman(second_snowmen)
-            if hit is not None:
-                hit.take_damage(fireball.damage)
-                score += hit.points
-                if hit.is_dead():
-                    second_snowmen.remove(hit)
-                    fireballs.remove(fireball)
+            if fireball.hit_boulder(boulders) is not None:
+                fireballs.remove(fireball)
             if fireball.is_out_of_bounds(WIDTH, HEIGHT):
                 fireballs.remove(fireball)
 
