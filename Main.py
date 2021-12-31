@@ -187,7 +187,10 @@ def main():
                     first_snowmen.remove(hit)
                     if current_wave < len(Waves.waves):
                         Waves.waves[current_wave].alive -= 1
-                    fireballs.remove(fireball)
+                    try:
+                        fireballs.remove(fireball)
+                    except ValueError:
+                        pass
 
             hit = fireball.hit_snowman(second_snowmen)
             if hit is not None:
@@ -199,7 +202,10 @@ def main():
                     second_snowmen.remove(hit)
                     if current_wave < len(Waves.waves):
                         Waves.waves[current_wave].alive -= 1
-                    fireballs.remove(fireball)
+                    try:
+                        fireballs.remove(fireball)
+                    except ValueError:
+                        pass
 
             hit = fireball.hit_snowman(third_snowmen)
             if hit is not None:
