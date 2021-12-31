@@ -211,10 +211,13 @@ def main():
                     third_snowmen.remove(hit)
                     Waves.waves[current_wave].alive -= 1
 
-            if fireball.hit_boulder(boulders) is not None:
-                fireballs.remove(fireball)
-            if fireball.is_out_of_bounds(WIDTH, HEIGHT):
-                fireballs.remove(fireball)
+            try:
+                if fireball.hit_boulder(boulders) is not None:
+                    fireballs.remove(fireball)
+                if fireball.is_out_of_bounds(WIDTH, HEIGHT):
+                    fireballs.remove(fireball)
+            except ValueError:
+                pass
 
         for snowball in small_snowballs:
             snowball.move()
