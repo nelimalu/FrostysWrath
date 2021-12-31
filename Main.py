@@ -185,7 +185,8 @@ def main():
                 if hit.is_dead():
                     death_sound.play()
                     first_snowmen.remove(hit)
-                    Waves.waves[current_wave].alive -= 1
+                    if current_wave < len(Waves.waves):
+                        Waves.waves[current_wave].alive -= 1
                     fireballs.remove(fireball)
 
             hit = fireball.hit_snowman(second_snowmen)
@@ -196,7 +197,8 @@ def main():
                 if hit.is_dead():
                     death_sound.play()
                     second_snowmen.remove(hit)
-                    Waves.waves[current_wave].alive -= 1
+                    if current_wave < len(Waves.waves):
+                        Waves.waves[current_wave].alive -= 1
                     fireballs.remove(fireball)
 
             hit = fireball.hit_snowman(third_snowmen)
@@ -208,7 +210,8 @@ def main():
                 if hit.is_dead():
                     death_sound.play()
                     third_snowmen.remove(hit)
-                    Waves.waves[current_wave].alive -= 1
+                    if current_wave < len(Waves.waves):
+                        Waves.waves[current_wave].alive -= 1
 
             try:
                 if fireball.hit_boulder(boulders) is not None:
@@ -275,7 +278,8 @@ def main():
                 snowhit_sound.play()
                 campfire.health -= firstsnowman.damage
                 first_snowmen.remove(firstsnowman)
-                Waves.waves[current_wave].alive -= 1
+                if current_wave < len(Waves.waves):
+                    Waves.waves[current_wave].alive -= 1
             firstsnowman.move(campfire, boulders)
 
         for secondsnowman in second_snowmen:
