@@ -212,7 +212,10 @@ def main():
                 snowman_hit_sound.play()
                 hit.take_damage(fireball.damage)
                 score += hit.points
-                fireballs.remove(fireball)
+                try:
+                    fireballs.remove(fireball)
+                except ValueError:
+                    pass
                 if hit.is_dead():
                     death_sound.play()
                     third_snowmen.remove(hit)
