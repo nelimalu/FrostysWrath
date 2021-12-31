@@ -100,10 +100,10 @@ class first_snowman(Snowman):
         for boulder in boulders:
             boulder_rect = pygame.Rect((boulder.x - 4, boulder.y - 4, boulder.width + 12, boulder.height + 12))
             if boulder_rect.colliderect(rect):
-                print("test")
-                if rect.bottom <= boulder_rect.top or rect.top >= boulder_rect.bottom:
+                print(rect.top)
+                if rect.bottom <= boulder_rect.top + 4 or rect.top >= boulder_rect.bottom - 4:
                     move_y = False
-                if rect.left >= boulder_rect.right or rect.right <= boulder_rect.left:
+                elif rect.left >= boulder_rect.right - 4 or rect.right <= boulder_rect.left + 4:
                     move_x = False
 
         if move_x:
