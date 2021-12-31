@@ -67,7 +67,7 @@ class Campfire:
 
 
 class Wood:
-    HEAL_AMOUNT = 5
+    HEAL_AMOUNT = 30
 
     def __init__(self, location):
         self.x = location[0]

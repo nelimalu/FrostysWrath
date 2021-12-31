@@ -162,7 +162,6 @@ def main():
     while run:
         clock.tick(60)
 
-
         keys = pygame.key.get_pressed()
         mousepos = pygame.mouse.get_pos()
 
@@ -250,7 +249,7 @@ def main():
         second_snowmen.extend(new_second)
         third_snowmen.extend(new_third)
 
-        if Waves.waves[current_wave].alive == 0:
+        if current_wave >= len(Waves.waves) or Waves.waves[current_wave].alive == 0:
             current_wave += 1
             if current_wave >= len(Waves.waves):
                 if score <= 500:

@@ -10,7 +10,7 @@ import time
 class Player:
     FIRE_REGEN_RATE = 0.5  # regenerate 1 fireball per second
     MAX_FIREBALLS = 10
-    FREEZE_SPEED = 0.5
+    FREEZE_SPEED = 0.3
     WIDTH = 25
     HEIGHT = 25
     ANIMATION_RATE = 7
