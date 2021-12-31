@@ -55,8 +55,10 @@ class Snowman:
             if boulder_rect.colliderect(rect):
                 if rect.bottom <= boulder_rect.top or rect.top >= boulder_rect.bottom:
                     move_y = False
+                    self.angle = Helper.find_angle(self.x, self.y, self.goal.x, self.goal.y)
                 if rect.left >= boulder_rect.right or rect.right <= boulder_rect.left:
                     move_x = False
+                    self.angle = Helper.find_angle(self.x, self.y, self.goal.x, self.goal.y)
 
         if move_x:
             self.x = x
@@ -100,11 +102,12 @@ class first_snowman(Snowman):
         for boulder in boulders:
             boulder_rect = pygame.Rect((boulder.x - 4, boulder.y - 4, boulder.width + 12, boulder.height + 12))
             if boulder_rect.colliderect(rect):
-                print(rect.top)
-                if rect.bottom <= boulder_rect.top + 4 or rect.top >= boulder_rect.bottom - 4:
+                if rect.bottom <= boulder_rect.top or rect.top >= boulder_rect.bottom:
                     move_y = False
-                elif rect.left >= boulder_rect.right - 4 or rect.right <= boulder_rect.left + 4:
+                    self.angle = Helper.find_angle(self.x, self.y, self.goal.x, self.goal.y)
+                if rect.left >= boulder_rect.right or rect.right <= boulder_rect.left:
                     move_x = False
+                    self.angle = Helper.find_angle(self.x, self.y, self.goal.x, self.goal.y)
 
         if move_x:
             self.x = x
