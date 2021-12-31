@@ -81,7 +81,7 @@ score = 0
 SCORE_FONT = pygame.font.SysFont('comicsans', 60)
 
 
-def update(player, fireballs, small_snowballs, big_snowballs,campfire, first_snowmen, second_snowmen, third_snowmen,secondsnowman_shooting,thirdsnowman_shooting,boulders, keys, mousepos):
+def update(heal_sound, player, fireballs, small_snowballs, big_snowballs,campfire, first_snowmen, second_snowmen, third_snowmen,secondsnowman_shooting,thirdsnowman_shooting,boulders, keys, mousepos):
     win.blit(background, (0, 0))
 
     campfire.draw(win, campfires)
@@ -93,6 +93,7 @@ def update(player, fireballs, small_snowballs, big_snowballs,campfire, first_sno
         if Helper.collide(player.x, player.y, player.WIDTH, player.HEIGHT, wood.x, wood.y):
             campfire.wood.remove(wood)
             if campfire.health < campfire.max_health:
+                heal_sound.play()
                 campfire.health += wood.HEAL_AMOUNT
                 if campfire.health > 100:
                     campfire.health = 100
@@ -148,17 +149,19 @@ def main():
     current_wave = 0
 
     # sounds
-    death_sound = pygame.mixer.Sound("assets/Death.mp3")
-    fireball_sound = pygame.mixer.Sound("assets/Fireball.mp3")
-    heal_sound = pygame.mixer.Sound("assets/Heal.mp3")
-    hit_sound = pygame.mixer.Sound("assets/Hit.mp3")
-    snowhit_sound = pygame.mixer.Sound("assets/SnowHit.mp3")
-    throw_sound = pygame.mixer.Sound("assets/Throw.mp3")
-    # wind_sound = pygame.mixer.Sound("assets/Wind.mp3")
+    death_sound = pygame.mixer.Sound("assets/Death.wav")
+    fireball_sound = pygame.mixer.Sound("assets/Fireball.wav")
+    heal_sound = pygame.mixer.Sound("assets/Heal.wav")
+    snowman_hit_sound = pygame.mixer.Sound("assets/Hit.wav")
+    snowhit_sound = pygame.mixer.Sound("assets/SnowHit.wav")
+    snowball_throw_sound = pygame.mixer.Sound("assets/Throw.wav")
+    pygame.mixer.music.load("assets/Background.wav")
+    pygame.mixer.music.play(-1)
 
     run = True
     while run:
         clock.tick(60)
+
 
         keys = pygame.key.get_pressed()
         mousepos = pygame.mouse.get_pos()
@@ -168,36 +171,42 @@ def main():
                 run = False
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if event.button == pygame.BUTTON_LEFT:
-                    fireball_sound.play()
                     fireball = player.shoot(mousepos)
                     if fireball is not None:
+                        fireball_sound.play()
                         fireballs.append(fireball)
 
         for fireball in fireballs:
             fireball.move()
             hit = fireball.hit_snowman(first_snowmen)
             if hit is not None:
+                snowman_hit_sound.play()
                 hit.take_damage(fireball.damage)
                 score += hit.points
                 if hit.is_dead():
+                    death_sound.play()
                     first_snowmen.remove(hit)
                     Waves.waves[current_wave].alive -= 1
                     fireballs.remove(fireball)
 
             hit = fireball.hit_snowman(second_snowmen)
             if hit is not None:
+                snowman_hit_sound.play()
                 hit.take_damage(fireball.damage)
                 score += hit.points
                 if hit.is_dead():
+                    death_sound.play()
                     second_snowmen.remove(hit)
                     Waves.waves[current_wave].alive -= 1
                     fireballs.remove(fireball)
 
             hit = fireball.hit_snowman(third_snowmen)
             if hit is not None:
+                snowman_hit_sound.play()
                 hit.take_damage(fireball.damage)
                 score += hit.points
                 if hit.is_dead():
+                    death_sound.play()
                     third_snowmen.remove(hit)
                     Waves.waves[current_wave].alive -= 1
                     fireballs.remove(fireball)
@@ -212,6 +221,7 @@ def main():
             if snowball.hit_goal():
                 if snowball.goal == campfire:
                     campfire.take_damage(snowball.damage)
+                    snowhit_sound.play()
                     small_snowballs.remove(snowball)
 
             if snowball.is_out_of_bounds(WIDTH, HEIGHT):
@@ -222,6 +232,7 @@ def main():
             if snowball.hit_goal():
                 if snowball.goal == campfire:
                     campfire.take_damage(snowball.damage)
+                    snowhit_sound.play()
                     big_snowballs.remove(snowball)
 
             if snowball.is_out_of_bounds(WIDTH, HEIGHT):
@@ -259,6 +270,7 @@ def main():
 
         for firstsnowman in first_snowmen:
             if firstsnowman.shoot():
+                snowhit_sound.play()
                 campfire.health -= firstsnowman.damage
                 first_snowmen.remove(firstsnowman)
             firstsnowman.move(campfire, boulders)
@@ -266,19 +278,21 @@ def main():
         for secondsnowman in second_snowmen:
             snowball = secondsnowman.shoot()
             if snowball is not None:
+                snowball_throw_sound.play()
                 small_snowballs.append(snowball)
             secondsnowman.move(campfire, boulders)
 
         for thirdsnowman in third_snowmen:
             snowball = thirdsnowman.shoot()
             if snowball is not None:
+                snowball_throw_sound.play()
                 big_snowballs.append(snowball)
             thirdsnowman.move(campfire, boulders)
 
         campfire.spawn_wood()
 
         player.update(keys, campfire, boulders)
-        update(player, fireballs, small_snowballs, big_snowballs,campfire, first_snowmen, second_snowmen, third_snowmen, second_snowman_shooting, third_snowman_shooting,boulders, keys, mousepos)
+        update(heal_sound, player, fireballs, small_snowballs, big_snowballs,campfire, first_snowmen, second_snowmen, third_snowmen, second_snowman_shooting, third_snowman_shooting,boulders, keys, mousepos)
 
 
 if __name__ == "__main__":
