@@ -21,6 +21,7 @@ trees = pygame.image.load('assets/Background-trees.png')
 freezing = pygame.image.load('assets/Freezing.png').convert()
 campfires = [pygame.image.load('assets/Campfire-' + str(i) + ".png") for i in range(1, 4)]
 outersloth = pygame.image.load('assets/Outersloth-white.png')
+rocks = [pygame.image.load("assets/rock-1.png"), pygame.image.load("assets/rock-2.png")]
 
 # right
 character_right = [pygame.image.load('assets/Character-right-' + str(i) + ".png") for i in range(1, 3)]
@@ -77,15 +78,10 @@ def update(player, fireballs, snowballs, campfire, snowmen, boulders, keys, mous
 
     win.blit(trees, (0, 0))
 
-    for boulder in boulders:
-        boulder.draw(win, player)
+    boulders[0].draw(win, player, rocks[0])
+    boulders[1].draw(win, player, rocks[1])
 
     player.draw(win, keys, mousepos, character_right, character_left, character_front, character_back, character_shoot)
-
-    pygame.draw.circle(win, (0, 0, 255), (player.x, player.y), 5)
-    pygame.draw.circle(win, (0, 0, 255), (player.x + player.WIDTH, player.y), 5)
-    pygame.draw.circle(win, (0, 0, 255), (player.x, player.y + player.HEIGHT), 5)
-    pygame.draw.circle(win, (0, 0, 255), (player.x + player.WIDTH, player.y + player.HEIGHT), 5)
 
     win.blit(score_text, (WIDTH // 2 - score_text.get_width() // 2, HEIGHT - 125))
 
@@ -104,7 +100,7 @@ def main():
     player = Player.Player(WIDTH // 2, 200, 4)
     campfire = Campfire.Campfire(WIDTH // 2, HEIGHT // 2, 100)
 
-    boulders = [Boulder.Boulder(300, 300, 70, 120)]
+    boulders = [Boulder.Boulder(300, 300, 105, 70), Boulder.Boulder(700, 250, 105, 70)]
     snowmen = []
     first_snowmen = []
     second_snowmen = []
