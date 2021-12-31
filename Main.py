@@ -57,6 +57,14 @@ second_snowman.append(secondsnowman_left_image)
 second_snowman_shooting = [pygame.image.load('assets/Second-snowman-shooting-' + str(i) + ".png") for i in range(1, 4)]
 secondsnowman_leftshooting_image = pygame.transform.flip(pygame.image.load('assets/Second-snowman-shooting-3.png'), True, False)
 second_snowman_shooting.append(secondsnowman_leftshooting_image)
+#thid_snowman
+third_snowman = [pygame.image.load('assets/Third-snowman-' + str(i) + ".png") for i in range(1, 4)]
+thirdsnowman_left_image = pygame.transform.flip(pygame.image.load('assets/Third-snowman-3.png'), True, False)
+third_snowman.append(thirdsnowman_left_image)
+
+third_snowman_shooting = [pygame.image.load('assets/Third-snowman-shooting-' + str(i) + ".png") for i in range(1, 4)]
+thirdsnowman_leftshooting_image = pygame.transform.flip(pygame.image.load('assets/Third-snowman-shooting-3.png'), True, False)
+third_snowman_shooting.append(thirdsnowman_leftshooting_image)
 
 clock = pygame.time.Clock()
 lost = False

@@ -161,7 +161,7 @@ class second_snowman(Snowman):
                     win.blit(secondsnowman[2], (self.x - self.WIDTH // 2 - 50, self.y - self.HEIGHT))
                 else:
                     win.blit(secondsnowman[3], (self.x - self.WIDTH // 2 - 50, self.y - self.HEIGHT))
-        pygame.draw.rect(win, (0, 0, 0), (self.x - self.WIDTH // 2, self.y - self.HEIGHT // 2, self.WIDTH, self.HEIGHT))
+        #pygame.draw.rect(win, (0, 0, 0), (self.x - self.WIDTH // 2, self.y - self.HEIGHT // 2, self.WIDTH, self.HEIGHT))
 
 
 class third_snowman(Snowman):
