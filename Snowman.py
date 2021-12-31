@@ -15,6 +15,7 @@ class Snowman:
     COOLDOWN = 1
     WIDTH = 25
     HEIGHT = 50
+    TOTAL_SNOWMAN = 0
 
     def __init__(self, location, goal, health, speed, damage, throwing_range, points):
         self.x = location[0]
@@ -33,7 +34,7 @@ class Snowman:
         # aidan walking cycle
         pygame.draw.rect(win, (255, 255, 255), (self.x - self.WIDTH // 2, self.y - self.HEIGHT // 2, self.WIDTH, self.HEIGHT))
 
-    def move(self, snowman, snowmen):
+    def move(self):
         if not self.reached_goal:
             self.x = self.x + math.sin(self.angle) * self.speed
             self.y = self.y + math.cos(self.angle) * self.speed
@@ -53,7 +54,7 @@ class Snowman:
         return self.health <= 0
 
 class first_snowman(Snowman):
-    def move(self, campfire, snowmen):
+    def move(self):
         if not self.reached_goal:
             self.x = self.x + math.sin(self.angle) * self.speed
             self.y = self.y + math.cos(self.angle) * self.speed

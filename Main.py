@@ -21,22 +21,25 @@ trees = pygame.image.load('assets/Background-trees.png')
 freezing = pygame.image.load('assets/Freezing.png').convert()
 campfires = [pygame.image.load('assets/Campfire-' + str(i) + ".png") for i in range(1, 4)]
 outersloth = pygame.image.load('assets/Outersloth-white.png')
-#right
+
+# right
 character_right = [pygame.image.load('assets/Character-right-' + str(i) + ".png") for i in range(1, 3)]
-#left
+# left
 character_left_image1 = pygame.transform.flip(pygame.image.load('assets/Character-right-1.png'), True, False)
 character_left_image2 =  pygame.transform.flip(pygame.image.load('assets/Character-right-2.png'), True, False)
 character_left = [character_left_image1,character_left_image2]
-#front
+# front
 character_front = [pygame.image.load('assets/Character-front-' + str(i) + ".png") for i in range(1, 4)]
-#back
+# back
 character_back = [pygame.image.load('assets/Character-back-' + str(i) + ".png") for i in range(1, 4)]
-#shoot
+# shoot
 character_shoot = [pygame.image.load('assets/Character-shoot-' + str(i) + ".png") for i in range(1, 4)]
 character_leftshoot_image = pygame.transform.flip(pygame.image.load('assets/Character-shoot-1.png'), True, False)
 character_shoot.insert(1, character_leftshoot_image)
-
-
+#first snowman
+first_snomwan = [pygame.image.load('assets/First-snowman-' + str(i) + ".png") for i in range(1, 4)]
+firstsnowman_left_image = pygame.transform.flip(pygame.image.load('assets/First-snowman-3.png'), True, False)
+first_snomwan.append(firstsnowman_left_image)
 
 clock = pygame.time.Clock()
 lost = False
@@ -69,8 +72,6 @@ def update(player, fireballs, snowballs, campfire, snowmen, boulders, keys, mous
     for x, projectile in enumerate([*fireballs, *snowballs]):
         projectile.draw(win)
 
-    player.draw(win, keys, mousepos, character_right, character_left, character_front, character_back, character_shoot)
-
     for snowman in snowmen:
         snowman.draw(win)
 
@@ -78,6 +79,13 @@ def update(player, fireballs, snowballs, campfire, snowmen, boulders, keys, mous
 
     for boulder in boulders:
         boulder.draw(win, player)
+
+    player.draw(win, keys, mousepos, character_right, character_left, character_front, character_back, character_shoot)
+
+    pygame.draw.circle(win, (0, 0, 255), (player.x, player.y), 5)
+    pygame.draw.circle(win, (0, 0, 255), (player.x + player.WIDTH, player.y), 5)
+    pygame.draw.circle(win, (0, 0, 255), (player.x, player.y + player.HEIGHT), 5)
+    pygame.draw.circle(win, (0, 0, 255), (player.x + player.WIDTH, player.y + player.HEIGHT), 5)
 
     win.blit(score_text, (WIDTH // 2 - score_text.get_width() // 2, HEIGHT - 125))
 
@@ -96,7 +104,7 @@ def main():
     player = Player.Player(WIDTH // 2, 200, 4)
     campfire = Campfire.Campfire(WIDTH // 2, HEIGHT // 2, 100)
 
-    boulders = [Boulder.Boulder(350, 300, 50, 70)]
+    boulders = [Boulder.Boulder(300, 300, 70, 120)]
     snowmen = []
     first_snowmen = []
     second_snowmen = []
@@ -120,7 +128,6 @@ def main():
                     fireball = player.shoot(mousepos)
                     if fireball is not None:
                         fireballs.append(fireball)
-                    # campfire.take_damage(5)
 
         for fireball in fireballs:
             fireball.move()
@@ -148,8 +155,12 @@ def main():
             lost = True
             run = False
 
+        #adds snowmen here
         if random.random() < Snowman.SNOWMAN_SPAWN_RATE:
             snowmen.append(Snowman.spawn_snowman(WIDTH, HEIGHT, campfire))
+
+
+
 
         for snowman in snowmen:
             snowball = snowman.shoot()
@@ -158,7 +169,8 @@ def main():
             snowman.move()
 
         campfire.spawn_wood()
-        player.update(keys, campfire)
+
+        player.update(keys, campfire, boulders)
         update(player, fireballs, snowballs, campfire, snowmen, boulders, keys, mousepos)
 
 
