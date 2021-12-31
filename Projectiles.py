@@ -19,8 +19,9 @@ class Projectile:
         self.damage = damage
         self.size = size
 
-    def draw(self, win):
-        pygame.gfxdraw.aacircle(win, int(self.x), int(self.y), self.size, (0,0,0))
+    def draw(self, win, item):
+        # pygame.gfxdraw.aacircle(win, int(self.x), int(self.y), self.size, (0,0,0))
+        win.blit(item, (int(self.x),int(self.y)))
 
     def move(self):
         # move the snowball along an angle

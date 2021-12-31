@@ -7,7 +7,9 @@ import time
 import Campfire
 
 # update
-SNOWMAN_SPAWN_RATE = 0.01
+FIRSTSNOWMAN_SPAWN_RATE = 0.01
+SECONDSNOWMAN_SPAWN_RATE = 0.01
+THIRDSNOWMAN_SPAWN_RATE = 0.01
 BORDER = (0, 0, 1100, 650)
 SAFE_DISTANCE = 30
 
@@ -34,7 +36,7 @@ class Snowman:
         # aidan walking cycle
         pygame.draw.rect(win, (255, 255, 255), (self.x - self.WIDTH // 2, self.y - self.HEIGHT // 2, self.WIDTH, self.HEIGHT))
 
-    def move(self):
+    def move(self, campfire):
         if not self.reached_goal:
             self.x = self.x + math.sin(self.angle) * self.speed
             self.y = self.y + math.cos(self.angle) * self.speed
@@ -54,12 +56,12 @@ class Snowman:
         return self.health <= 0
 
 class first_snowman(Snowman):
-    def move(self):
+    def move(self, campfire):
         if not self.reached_goal:
             self.x = self.x + math.sin(self.angle) * self.speed
             self.y = self.y + math.cos(self.angle) * self.speed
             if Helper.get_distance(self.x, self.y, campfire.x, campfire.y) >= campfire.FIRE_DISTANCE:
-                return True
+                self.reached_goal = True
 
     '''
     def draw(self, win):

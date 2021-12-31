@@ -75,7 +75,6 @@ class Wood:
         self.width = 25
         self.height = 25
 
-    def draw(self, win):
-        # aidan magic
-        pygame.draw.rect(win, (150, 75, 0), (self.x - self.width, self.y - self.height, self.width, self.height))
-
+    def draw(self, win, wood):
+        # pygame.draw.rect(win, (150, 75, 0), (self.x - self.width, self.y - self.height, self.width, self.height))
+        win.blit(wood, (self.x - self.width, self.y - self.height))

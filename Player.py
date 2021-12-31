@@ -70,16 +70,20 @@ class Player:
                 win.blit(back[self.animation_step], (self.x - x_offset, self.y - y_offset))
         else:
             if self.shooting:
-                if self.y - 30 <= mousepos[1] <= self.y - 30 + self.HEIGHT:
+                if self.y - 30 <= mousepos[1] <= self.y  + self.HEIGHT:
                     if mousepos[0] >= self.x + self.WIDTH:
                         win.blit(shoot[0], (self.x - x_offset, self.y - y_offset))
+                        self.direction = "right"
                     elif mousepos[0] <= self.x:
                         win.blit(shoot[1], (self.x - x_offset, self.y - y_offset))
+                        self.direction = "left"
                 else:
                     if mousepos[1] > self.y - 30 + self.HEIGHT:
                         win.blit(shoot[2], (self.x - x_offset, self.y - y_offset))
+                        self.direction = "front"
                     elif mousepos[1] < self.y - 30:
                         win.blit(shoot[3], (self.x - x_offset, self.y - y_offset))
+                        self.direction = "back"
             else:
                 if self.direction == "right":
                     win.blit(right[0], (self.x - x_offset, self.y - y_offset))
