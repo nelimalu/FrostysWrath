@@ -49,7 +49,7 @@ class Wave:
 waves = [
     # Wave(WavePart(1, 10, 0, 0.5)),
     # Wave(WavePart(1, 15, 10, 0.3), WavePart(2, 5, 20, 10)),
-    Wave(WavePart(1, 12, 10, 0.3), WavePart(2, 5, 20, 10), WavePart(3, 2, 10, 10)),
-    Wave(WavePart(1, 40, 10, 0.5)),
-    Wave(WavePart(1, 15, 10, 0.3), WavePart(2, 5, 20, 10), WavePart(3, 2, 10, 10))
+    #Wave(WavePart(1, 12, 10, 0.3), WavePart(2, 5, 20, 10), WavePart(3, 2, 10, 10)),
+    #Wave(WavePart(1, 40, 10, 0.5)),
+    Wave(WavePart(1, 15, 10, 0.3), WavePart(2, 5, 20, 10), WavePart(3, 10, 10, 10))
 ]

@@ -240,6 +240,6 @@ def spawn_thirdsnowman(width, height, campfire):
     damage = 6
     throwing_range = 200
     points = 15
-    return first_snowman(get_snowman_location(width, height, campfire.BORDER), campfire, health, speed, damage, throwing_range, points)
+    return third_snowman(get_snowman_location(width, height, campfire.BORDER), campfire, health, speed, damage, throwing_range, points)
 
 # MAKE FIREBALLS COLLIDE WITH SNOWMAN
