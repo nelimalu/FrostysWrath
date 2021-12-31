@@ -67,6 +67,8 @@ third_snowman_shooting = [pygame.image.load('assets/Third-snowman-shooting-' + s
 thirdsnowman_leftshooting_image = pygame.transform.flip(pygame.image.load('assets/Third-snowman-shooting-3.png'), True, False)
 third_snowman_shooting.append(thirdsnowman_leftshooting_image)
 
+
+
 clock = pygame.time.Clock()
 lost = False
 
@@ -145,6 +147,15 @@ def main():
 
     current_wave = 0
 
+    # sounds
+    death_sound = pygame.mixer.Sound("assets/Death.mp3")
+    fireball_sound = pygame.mixer.Sound("assets/Fireball.mp3")
+    heal_sound = pygame.mixer.Sound("assets/Heal.mp3")
+    hit_sound = pygame.mixer.Sound("assets/Hit.mp3")
+    snowhit_sound = pygame.mixer.Sound("assets/SnowHit.mp3")
+    throw_sound = pygame.mixer.Sound("assets/Throw.mp3")
+    # wind_sound = pygame.mixer.Sound("assets/Wind.mp3")
+
     run = True
     while run:
         clock.tick(60)
@@ -157,6 +168,7 @@ def main():
                 run = False
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if event.button == pygame.BUTTON_LEFT:
+                    fireball_sound.play()
                     fireball = player.shoot(mousepos)
                     if fireball is not None:
                         fireballs.append(fireball)
