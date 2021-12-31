@@ -260,7 +260,7 @@ def main():
                 if random.random() < Snowman.SECONDSNOWMAN_SPAWN_RATE and len(first_snowmen) + len(
                         second_snowmen) < Snowman.TOTAL_SNOWMAN:
                     second_snowmen.append(Snowman.spawn_secondsnowman(WIDTH, HEIGHT, campfire))
-            elif score <= 800:
+            else:
                 Snowman.FIRSTSNOWMAN_SPAWN_RATE = 0.025
                 Snowman.SECONDSNOWMAN_SPAWN_RATE = 0.05
                 if random.random() < Snowman.FIRSTSNOWMAN_SPAWN_RATE:
