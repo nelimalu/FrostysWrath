@@ -47,10 +47,10 @@ class Wave:
 
 # Wave -> level, amount, first introduction, time_between_spawn
 waves = [
-    Wave(WavePart(1, 10, 0, 0.5)),
-    Wave(WavePart(1, 15, 5, 0.3), WavePart(2, 5, 10, 10)),
-    Wave(WavePart(1, 12, 5, 0.3), WavePart(2, 5, 10, 10), WavePart(3, 2, 10, 10)),
-    Wave(WavePart(1, 40, 5, 0.5)),
-    Wave(WavePart(1, 15, 5, 0.3), WavePart(2, 5, 10, 10), WavePart(3, 2, 10, 10)),
+    #Wave(WavePart(1, 10, 0, 0.5)),
+    #Wave(WavePart(1, 15, 5, 0.3), WavePart(2, 5, 10, 10)),
+    #Wave(WavePart(1, 12, 5, 0.3), WavePart(2, 5, 10, 10), WavePart(3, 2, 10, 10)),
+    #Wave(WavePart(1, 40, 5, 0.5)),
+    #Wave(WavePart(1, 15, 5, 0.3), WavePart(2, 5, 10, 10), WavePart(3, 2, 10, 10)),
     Wave(WavePart(3, 8, 5, 0))
 ]
