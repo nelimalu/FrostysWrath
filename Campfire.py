@@ -31,7 +31,7 @@ class Campfire:
         if self.animation_step == 3:
             self.animation_step = 0
 
-        pygame.gfxdraw.aacircle(win, self.x, self.y, self.FREEZE_DISTANCE, (255,0,0))
+        pygame.gfxdraw.aacircle(win, self.x, self.y, self.FREEZE_DISTANCE, (100,100,100))
         # pygame.gfxdraw.aacircle(win, self.x, self.y, self.GAIN_DISTANCE, (0, 255, 0))
 
         # Campfire

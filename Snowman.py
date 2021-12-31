@@ -106,7 +106,7 @@ class first_snowman(Snowman):
         for boulder in boulders:
             boulder_rect = pygame.Rect((boulder.x - 4, boulder.y - 4, boulder.width + 12, boulder.height + 12))
             if boulder_rect.colliderect(rect):
-                if rect.bottom <= boulder_rect.top + 4 or rect.top >= boulder_rect.bottom - 4:
+                if rect.bottom <= boulder_rect.top - 8 or rect.top >= boulder_rect.bottom - 4:
                     move_y = False
                     self.angle = Helper.find_angle(self.x, self.y, self.goal.x, self.goal.y)
                 elif rect.left >= boulder_rect.right - 4 or rect.right <= boulder_rect.left + 4:
@@ -132,6 +132,11 @@ class first_snowman(Snowman):
 
 
 class second_snowman(Snowman):
+    def __init__(self, location, goal, health, speed, damage, throwing_range, points):
+        super().__init__(location, goal, health, speed, damage, throwing_range, points)
+        self.WIDTH = 40
+        self.HEIGHT = 80
+
     def draw(self, win, secondsnowman, secondsnowmanshooting):
         self.frame += 1
 
@@ -164,6 +169,11 @@ class second_snowman(Snowman):
 
 
 class third_snowman(Snowman):
+    def __init__(self, location, goal, health, speed, damage, throwing_range, points):
+        super().__init__(location, goal, health, speed, damage, throwing_range, points)
+        self.WIDTH = 60
+        self.HEIGHT = 120
+
     def draw(self, win, thirdsnowman, thirdsnowmanshooting):
         self.frame += 1
 
@@ -211,7 +221,7 @@ def spawn_firstsnowman(width, height, campfire):
     speed = 2
     damage = 1
     throwing_range = 200
-    points = 150
+    points = 5
     return first_snowman(get_snowman_location(width, height, campfire.BORDER), campfire, health, speed, damage, throwing_range, points)
 
 

@@ -135,7 +135,7 @@ def main():
     player = Player.Player(WIDTH // 2, 200, 4)
     campfire = Campfire.Campfire(WIDTH // 2, HEIGHT // 2, 100)
 
-    boulders = [Boulder.Boulder(300, 300, 105, 70), Boulder.Boulder(700, 250, 105, 70)]
+    boulders = [Boulder.Boulder(300, 400, 105, 70), Boulder.Boulder(700, 250, 105, 70)]
     first_snowmen = []
     second_snowmen = []
     third_snowmen = []
@@ -157,7 +157,6 @@ def main():
                 run = False
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if event.button == pygame.BUTTON_LEFT:
-                    print(mousepos)
                     fireball = player.shoot(mousepos)
                     if fireball is not None:
                         fireballs.append(fireball)
