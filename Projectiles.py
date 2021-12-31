@@ -1,5 +1,3 @@
-import pygame
-import pygame.gfxdraw
 import math
 import Helper
 
