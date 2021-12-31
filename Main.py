@@ -45,7 +45,7 @@ fireball_image = pygame.image.load('assets/Fireball.png')
 FIREBALL = pygame.transform.scale(fireball_image, (15, 15))
 snowball_image = pygame.image.load('assets/Snowball.png')
 SMALL_SNOWBALL = pygame.transform.scale(snowball_image, (15, 15))
-BIG_SNOWBALL = pygame.transform.scale(snowball_image, (25, 25))
+BIG_SNOWBALL = pygame.transform.scale(snowball_image, (30, 30))
 # first snowman
 first_snomwan = [pygame.image.load('assets/First-snowman-' + str(i) + ".png") for i in range(1, 4)]
 firstsnowman_left_image = pygame.transform.flip(pygame.image.load('assets/First-snowman-3.png'), True, False)
