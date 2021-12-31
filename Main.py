@@ -54,6 +54,9 @@ second_snowman = [pygame.image.load('assets/Second-snowman-' + str(i) + ".png") 
 secondsnowman_left_image = pygame.transform.flip(pygame.image.load('assets/Second-snowman-3.png'), True, False)
 second_snowman.append(secondsnowman_left_image)
 
+second_snowman_shooting = [pygame.image.load('assets/Second-snowman-shooting-' + str(i) + ".png") for i in range(1, 4)]
+secondsnowman_leftshooting_image = pygame.transform.flip(pygame.image.load('assets/Second-snowman-shooting-3.png'), True, False)
+second_snowman_shooting.append(secondsnowman_leftshooting_image)
 
 clock = pygame.time.Clock()
 lost = False
@@ -67,7 +70,7 @@ score = 0
 SCORE_FONT = pygame.font.SysFont('comicsans', 60)
 
 
-def update(player, fireballs, small_snowballs, big_snowballs,campfire, first_snowmen, second_snowmen, third_snowmen,boulders, keys, mousepos):
+def update(player, fireballs, small_snowballs, big_snowballs,campfire, first_snowmen, second_snowmen, third_snowmen,secondsnowman_shooting,boulders, keys, mousepos):
     win.blit(background, (0, 0))
 
     campfire.draw(win, campfires)
@@ -89,10 +92,10 @@ def update(player, fireballs, small_snowballs, big_snowballs,campfire, first_sno
         snowball.draw(win, SMALL_SNOWBALL)
 
     for firstsnowman in first_snowmen:
-        firstsnowman.draw(win, first_snomwan)
+        firstsnowman.draw(win, first_snomwan, secondsnowman_shooting)
 
     for secondsnowman in second_snowmen:
-        secondsnowman.draw(win, second_snowman)
+        secondsnowman.draw(win, second_snowman, secondsnowman_shooting)
 
     win.blit(trees, (0, 0))
 
@@ -138,6 +141,7 @@ def main():
                 run = False
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if event.button == pygame.BUTTON_LEFT:
+                    print(mousepos)
                     fireball = player.shoot(mousepos)
                     if fireball is not None:
                         fireballs.append(fireball)
@@ -205,7 +209,7 @@ def main():
         campfire.spawn_wood()
 
         player.update(keys, campfire, boulders)
-        update(player, fireballs, small_snowballs, big_snowballs,campfire, first_snowmen, second_snowmen, third_snowmen,boulders, keys, mousepos)
+        update(player, fireballs, small_snowballs, big_snowballs,campfire, first_snowmen, second_snowmen, third_snowmen,second_snowman_shooting,boulders, keys, mousepos)
 
 
 if __name__ == "__main__":

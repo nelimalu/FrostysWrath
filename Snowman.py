@@ -18,6 +18,7 @@ class Snowman:
     COOLDOWN = 1
     WIDTH = 25
     HEIGHT = 50
+    ANIMATION_RATE = 7
 
     def __init__(self, location, goal, health, speed, damage, throwing_range, points):
         self.x = location[0]
@@ -31,8 +32,11 @@ class Snowman:
         self.reached_goal = False
         self.time_since_last_shot = 0
         self.points = points
+        self.shooting = False
+        self.animation_step = 0
+        self.frame = 0
 
-    def draw(self, win, firstsnowman):
+    def draw(self, win, snowman, snowmanshooting):
         # aidan walking cycle
         pygame.draw.rect(win, (255, 255, 255), (self.x - self.WIDTH // 2, self.y - self.HEIGHT // 2, self.WIDTH, self.HEIGHT))
 
@@ -69,6 +73,7 @@ class Snowman:
     def shoot(self):
         if self.reached_goal:
             if time.time() - self.time_since_last_shot >= self.COOLDOWN:
+                self.shooting = True
                 self.time_since_last_shot = time.time()
                 return Projectiles.Snowball(self.x, self.y, (self.goal.x, self.goal.y), 6, 1, 5, self.goal)
 
@@ -114,7 +119,7 @@ class first_snowman(Snowman):
         if move_y:
             self.y = y
 
-    def draw(self, win, firstsnowman):
+    def draw(self, win, firstsnowman, snowmanshooting):
         if 150 <= self.x <= 900 and (self.y < 250 or self.y > 400):
             if self.y <= 325:
                 win.blit(firstsnowman[1], (self.x - self.WIDTH // 2-30, self.y - self.HEIGHT))
@@ -128,18 +133,35 @@ class first_snowman(Snowman):
 
 
 class second_snowman(Snowman):
-    def draw(self, win, secondsnowman):
-        if self.x >= 150 and self.x <= 900 and (self.y < 250 or self.y > 400):
-            if self.y <= 325:
-                win.blit(secondsnowman[1], (self.x - self.WIDTH// 2 - 50, self.y - self.HEIGHT))
+    def draw(self, win, secondsnowman, secondsnowmanshooting):
+        self.frame += 1
+
+        if self.frame % (self.ANIMATION_RATE * 3) == 0:
+            if self.shooting:
+                self.shooting = False
+
+        if self.shooting:
+            if self.y <= 200:
+                win.blit(secondsnowmanshooting[1], (self.x - self.WIDTH// 2 - 50, self.y - self.HEIGHT))
+            elif self.y >= 450:
+                win.blit(secondsnowmanshooting[0], (self.x - self.WIDTH// 2 - 50, self.y - self.HEIGHT))
+            elif self.x <= 450:
+                win.blit(secondsnowmanshooting[2], (self.x - self.WIDTH// 2 - 50, self.y - self.HEIGHT))
             else:
-                win.blit(secondsnowman[0], (self.x - self.WIDTH // 2 - 50, self.y - self.HEIGHT))
+                win.blit(secondsnowmanshooting[3], (self.x - self.WIDTH// 2 - 50, self.y - self.HEIGHT))
+
         else:
-            if self.x <= 550:
-                win.blit(secondsnowman[2], (self.x - self.WIDTH // 2 - 50, self.y - self.HEIGHT))
+            if self.x >= 150 and self.x <= 900 and (self.y < 250 or self.y > 400):
+                if self.y <= 325:
+                    win.blit(secondsnowman[1], (self.x - self.WIDTH// 2 - 50, self.y - self.HEIGHT))
+                else:
+                    win.blit(secondsnowman[0], (self.x - self.WIDTH // 2 - 50, self.y - self.HEIGHT))
             else:
-                win.blit(secondsnowman[3], (self.x - self.WIDTH // 2 - 50, self.y - self.HEIGHT))
-        #pygame.draw.rect(win, (0, 0, 0), (self.x - self.WIDTH // 2, self.y - self.HEIGHT // 2, self.WIDTH, self.HEIGHT))
+                if self.x <= 550:
+                    win.blit(secondsnowman[2], (self.x - self.WIDTH // 2 - 50, self.y - self.HEIGHT))
+                else:
+                    win.blit(secondsnowman[3], (self.x - self.WIDTH // 2 - 50, self.y - self.HEIGHT))
+        pygame.draw.rect(win, (0, 0, 0), (self.x - self.WIDTH // 2, self.y - self.HEIGHT // 2, self.WIDTH, self.HEIGHT))
 
 
 class third_snowman(Snowman):
@@ -161,7 +183,7 @@ def spawn_firstsnowman(width, height, campfire):
     speed = 2
     damage = 1
     throwing_range = 200
-    points = 5
+    points = 150
     return first_snowman(get_snowman_location(width, height, campfire.BORDER), campfire, health, speed, damage, throwing_range, points)
 
 
