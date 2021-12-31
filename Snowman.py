@@ -65,7 +65,6 @@ class Snowman:
         if move_y:
             self.y = y
 
-
     def shoot(self):
         if self.reached_goal:
             if time.time() - self.time_since_last_shot >= self.COOLDOWN:
