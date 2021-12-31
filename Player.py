@@ -139,9 +139,9 @@ class Player:
         move_x = True
         move_y = True
         if not Helper.get_distance(self.x, y, campfire.x, campfire.y) >= campfire.FIRE_DISTANCE:
-            move_x = False
-        if not Helper.get_distance(x, self.y, campfire.x, campfire.y) >= campfire.FIRE_DISTANCE:
             move_y = False
+        if not Helper.get_distance(x, self.y, campfire.x, campfire.y) >= campfire.FIRE_DISTANCE:
+            move_x = False
 
         for boulder in boulders:
             if pygame.Rect((boulder.x - 4, boulder.y - 4, boulder.width + 12, boulder.height + 12)).colliderect((x, y, self.WIDTH, self.HEIGHT)):

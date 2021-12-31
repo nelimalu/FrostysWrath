@@ -92,12 +92,10 @@ class Boulder:
             "BOTTOM RIGHT": (self.corners[1], self.corners[2])
         }
 
-    def draw(self, win, player):
+    def draw(self, win, player, image):
         self.shadow(win, player)
         self.draw_shadow(win)
-        pygame.draw.rect(win, (255,0,0), (self.x, self.y, self.width, self.height))
-
-        # print(win.copy())
+        win.blit(image, (self.x - 10, self.y - 45))
 
     def draw_shadow(self, win):
         pointslist = [self.pointslist[0], self.pointslist[1], self.pointslist[3], self.pointslist[2]]
@@ -111,9 +109,12 @@ class Boulder:
 
             masked_image = cv2.bitwise_or(background, mask)
             cv2.imwrite('assets/new_masked_image.png', masked_image)
-            surf = pygame.image.load('assets/new_masked_image.png')
-            surf.set_colorkey((255, 255, 255))
-            win.blit(surf, (0, 0))
+            try:
+                surf = pygame.image.load('assets/new_masked_image.png')
+                surf.set_colorkey((255, 255, 255))
+                win.blit(surf, (0, 0))
+            except:
+                pass
         else:
             pygame.draw.polygon(win, (0,0,0), self.pointslist)
 
@@ -131,7 +132,6 @@ class Boulder:
         if math.degrees(self.angles[1]) == -90.0 and math.degrees(self.angles[0]) > 0 and self.side in ["RIGHT", "TOP RIGHT", "BOTTOM RIGHT"]:
             self.angles[1] = math.radians(90.0)
 
-        print([math.degrees(x) for x in self.angles])
 
         # pygame.draw.polygon(win, (22, 22, 22), make_shadow(win, self.useful_points, self.angles, self.side))
         shadow = make_shadow(win, self.useful_points, self.angles, self.side)
