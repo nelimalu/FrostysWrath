@@ -4,9 +4,6 @@ import math
 import Helper
 import Projectiles
 import time
-from pathfinding.core.diagonal_movement import DiagonalMovement
-from pathfinding.core.grid import Grid
-from pathfinding.finder.a_star import AStarFinder
 
 # update
 FIRSTSNOWMAN_SPAWN_RATE = 0.01
@@ -15,12 +12,6 @@ THIRDSNOWMAN_SPAWN_RATE = 0.005
 BORDER = (0, 0, 1100, 650)
 SAFE_DISTANCE = 30
 TOTAL_SNOWMAN = 5
-
-MATRIX = [[0 for m in range(BORDER[3])] for n in range(BORDER[2])]
-
-
-def pathfind():
-    pass
 
 
 class Snowman:
@@ -45,12 +36,33 @@ class Snowman:
         # aidan walking cycle
         pygame.draw.rect(win, (255, 255, 255), (self.x - self.WIDTH // 2, self.y - self.HEIGHT // 2, self.WIDTH, self.HEIGHT))
 
-    def move(self, campfire):
+    def move(self, campfire, boulders):
+        x = [self.x][:][0]
+        y = [self.y][:][0]
+
         if not self.reached_goal:
-            self.x = self.x + math.sin(self.angle) * self.speed
-            self.y = self.y + math.cos(self.angle) * self.speed
+            x = self.x + math.sin(self.angle) * self.speed
+            y = self.y + math.cos(self.angle) * self.speed
             if Helper.get_distance(self.x, self.y, self.goal.x, self.goal.y) <= self.throwing_range:
                 self.reached_goal = True
+
+        move_x = True
+        move_y = True
+
+        rect = pygame.Rect(x, y, self.WIDTH, self.HEIGHT)
+        for boulder in boulders:
+            boulder_rect = pygame.Rect((boulder.x - 4, boulder.y - 4, boulder.width + 12, boulder.height + 12))
+            if boulder_rect.colliderect(rect):
+                if rect.bottom <= boulder_rect.top or rect.top >= boulder_rect.bottom:
+                    move_y = False
+                if rect.left >= boulder_rect.right or rect.right <= boulder_rect.left:
+                    move_x = False
+
+        if move_x:
+            self.x = x
+        if move_y:
+            self.y = y
+
 
     def shoot(self):
         if self.reached_goal:
@@ -64,18 +76,40 @@ class Snowman:
     def is_dead(self):
         return self.health <= 0
 
+
 class first_snowman(Snowman):
 
     def shoot(self):
         if self.reached_goal:
             return True
 
-    def move(self, campfire):
+    def move(self, campfire, boulders):
+        x = [self.x][:][0]
+        y = [self.y][:][0]
+
         if not self.reached_goal:
-            self.x = self.x + math.sin(self.angle) * self.speed
-            self.y = self.y + math.cos(self.angle) * self.speed
+            x = self.x + math.sin(self.angle) * self.speed
+            y = self.y + math.cos(self.angle) * self.speed
             if Helper.get_distance(self.x, self.y, campfire.x, campfire.y) <= campfire.FIRE_DISTANCE:
                 self.reached_goal = True
+
+        move_x = True
+        move_y = True
+
+        rect = pygame.Rect(x, y, self.WIDTH, self.HEIGHT)
+        for boulder in boulders:
+            boulder_rect = pygame.Rect((boulder.x - 4, boulder.y - 4, boulder.width + 12, boulder.height + 12))
+            if boulder_rect.colliderect(rect):
+                print("test")
+                if rect.bottom <= boulder_rect.top or rect.top >= boulder_rect.bottom:
+                    move_y = False
+                if rect.left >= boulder_rect.right or rect.right <= boulder_rect.left:
+                    move_x = False
+
+        if move_x:
+            self.x = x
+        if move_y:
+            self.y = y
 
     def draw(self, win, firstsnowman):
         if 150 <= self.x <= 900 and (self.y < 250 or self.y > 400):
@@ -110,11 +144,11 @@ class third_snowman(Snowman):
 
 
 def get_snowman_location(width, height, border):
-    x = random.randint(0, width)
-    y = random.randint(0, height)
+    x = random.randint(0, width - 1)
+    y = random.randint(0, height - 1)
     while border[1] < y < border[3] and border[0] < x < border[2]:
-        y = random.randint(0, height)
-        x = random.randint(0, width)
+        y = random.randint(0, height - 1)
+        x = random.randint(0, width - 1)
 
     return x, y
 

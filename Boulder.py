@@ -94,7 +94,7 @@ class Boulder:
 
     def draw(self, win, player, image):
         self.shadow(win, player)
-        self.draw_shadow(win)
+        # self.draw_shadow(win)
         win.blit(image, (self.x - 10, self.y - 45))
 
     def draw_shadow(self, win):

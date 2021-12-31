@@ -194,13 +194,13 @@ def main():
             if firstsnowman.shoot():
                 campfire.health -= firstsnowman.damage
                 first_snowmen.remove(firstsnowman)
-            firstsnowman.move(campfire)
+            firstsnowman.move(campfire, boulders)
 
         for secondsnowman in second_snowmen:
             snowball = secondsnowman.shoot()
             if snowball is not None:
                 small_snowballs.append(snowball)
-            secondsnowman.move(campfire)
+            secondsnowman.move(campfire, boulders)
 
         campfire.spawn_wood()
 
