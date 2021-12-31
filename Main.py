@@ -97,9 +97,6 @@ def update(player, fireballs, small_snowballs, big_snowballs,campfire, first_sno
     for secondsnowman in second_snowmen:
         secondsnowman.draw(win, second_snowman)
 
-    for boulder in boulders:
-        boulder.draw_shadow(win)
-
     win.blit(trees, (0, 0))
 
     player.draw(win, keys, mousepos, character_right, character_left, character_front, character_back, character_shoot)
