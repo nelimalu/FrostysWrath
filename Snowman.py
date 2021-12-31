@@ -12,12 +12,12 @@ SECONDSNOWMAN_SPAWN_RATE = 0.01
 THIRDSNOWMAN_SPAWN_RATE = 0.01
 BORDER = (0, 0, 1100, 650)
 SAFE_DISTANCE = 30
+TOTAL_SNOWMAN = 5
 
 class Snowman:
     COOLDOWN = 1
     WIDTH = 25
     HEIGHT = 50
-    TOTAL_SNOWMAN = 0
 
     def __init__(self, location, goal, health, speed, damage, throwing_range, points):
         self.x = location[0]
@@ -79,12 +79,26 @@ class first_snowman(Snowman):
                 win.blit(firstsnowman[2], (self.x - self.WIDTH // 2-30, self.y - self.HEIGHT))
             else:
                 win.blit(firstsnowman[3], (self.x - self.WIDTH // 2-30, self.y - self.HEIGHT))
-        pygame.draw.rect(win, (0, 0, 0), (self.x - self.WIDTH // 2, self.y - self.HEIGHT // 2, self.WIDTH, self.HEIGHT))
+        #pygame.draw.rect(win, (0, 0, 0), (self.x - self.WIDTH // 2, self.y - self.HEIGHT // 2, self.WIDTH, self.HEIGHT))
 
 
 class second_snowman(Snowman):
-    pass
+    def draw(self, win, secondsnowman):
+        if self.x >= 150 and self.x <= 900 and (self.y < 250 or self.y > 400):
+            if self.y <= 325:
+                win.blit(secondsnowman[1], (self.x - self.WIDTH// 2 - 50, self.y - self.HEIGHT))
+            else:
+                win.blit(secondsnowman[0], (self.x - self.WIDTH // 2 - 50, self.y - self.HEIGHT))
+        else:
+            if self.x <= 550:
+                win.blit(secondsnowman[2], (self.x - self.WIDTH // 2 - 50, self.y - self.HEIGHT))
+            else:
+                win.blit(secondsnowman[3], (self.x - self.WIDTH // 2 - 50, self.y - self.HEIGHT))
+        #pygame.draw.rect(win, (0, 0, 0), (self.x - self.WIDTH // 2, self.y - self.HEIGHT // 2, self.WIDTH, self.HEIGHT))
 
+
+class third_snowman(Snowman):
+    pass
 
 def get_snowman_location(width, height, border):
     x = random.randint(0, width)
@@ -106,18 +120,18 @@ def spawn_firstsnowman(width, height, campfire):
 
 def spawn_secondsnowman(width, height, campfire):
     health = 15
-    speed = 3
-    damage = 2
+    speed = 2
+    damage = 3
     throwing_range = 200
     points = 10
     return second_snowman(get_snowman_location(width, height, campfire.BORDER), campfire, health, speed, damage, throwing_range, points)
 
 def spawn_thirdsnowman(width, height, campfire):
     health = 10
-    speed = 2
-    damage = 1
+    speed = 3
+    damage = 6
     throwing_range = 200
-    points = 5
+    points = 15
     return first_snowman(get_snowman_location(width, height, campfire.BORDER), campfire, health, speed, damage, throwing_range, points)
 
 # MAKE FIREBALLS COLLIDE WITH SNOWMAN
