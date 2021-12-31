@@ -1,12 +1,13 @@
 import pygame
 import Player
 import Campfire
-import Snowman
+import Waves
 import TitlePage
 import Helper
-import random
 import EndPage
 import Boulder
+import Snowman
+import random
 
 pygame.mixer.init()
 
@@ -27,7 +28,7 @@ rocks = [pygame.image.load("assets/rock-1.png"), pygame.image.load("assets/rock-
 character_right = [pygame.image.load('assets/Character-right-' + str(i) + ".png") for i in range(1, 3)]
 # left
 character_left_image1 = pygame.transform.flip(pygame.image.load('assets/Character-right-1.png'), True, False)
-character_left_image2 =  pygame.transform.flip(pygame.image.load('assets/Character-right-2.png'), True, False)
+character_left_image2 = pygame.transform.flip(pygame.image.load('assets/Character-right-2.png'), True, False)
 character_left = [character_left_image1,character_left_image2]
 # front
 character_front = [pygame.image.load('assets/Character-front-' + str(i) + ".png") for i in range(1, 4)]
@@ -37,19 +38,19 @@ character_back = [pygame.image.load('assets/Character-back-' + str(i) + ".png") 
 character_shoot = [pygame.image.load('assets/Character-shoot-' + str(i) + ".png") for i in range(1, 4)]
 character_leftshoot_image = pygame.transform.flip(pygame.image.load('assets/Character-shoot-1.png'), True, False)
 character_shoot.insert(1, character_leftshoot_image)
-#wood
+# wood
 woods = pygame.image.load('assets/Wood.png')
-#projectiles
+# projectiles
 fireball_image = pygame.image.load('assets/Fireball.png')
 FIREBALL = pygame.transform.scale(fireball_image, (15, 15))
 snowball_image = pygame.image.load('assets/Snowball.png')
 SMALL_SNOWBALL = pygame.transform.scale(snowball_image, (15, 15))
-BIG_SNOWBALL = pygame.transform.scale(snowball_image, ( 25, 25))
-#first snowman
+BIG_SNOWBALL = pygame.transform.scale(snowball_image, (25, 25))
+# first snowman
 first_snomwan = [pygame.image.load('assets/First-snowman-' + str(i) + ".png") for i in range(1, 4)]
 firstsnowman_left_image = pygame.transform.flip(pygame.image.load('assets/First-snowman-3.png'), True, False)
 first_snomwan.append(firstsnowman_left_image)
-#second_snowman
+# second_snowman
 second_snowman = [pygame.image.load('assets/Second-snowman-' + str(i) + ".png") for i in range(1, 4)]
 secondsnowman_left_image = pygame.transform.flip(pygame.image.load('assets/Second-snowman-3.png'), True, False)
 second_snowman.append(secondsnowman_left_image)
@@ -137,9 +138,11 @@ def main():
     small_snowballs = []
     big_snowballs = []
 
+    current_wave = 0
+
     run = True
     while run:
-        # clock.tick(60)
+        clock.tick(60)
 
         keys = pygame.key.get_pressed()
         mousepos = pygame.mouse.get_pos()
@@ -162,7 +165,27 @@ def main():
                 score += hit.points
                 if hit.is_dead():
                     first_snowmen.remove(hit)
+                    Waves.waves[current_wave].alive -= 1
                     fireballs.remove(fireball)
+
+            hit = fireball.hit_snowman(second_snowmen)
+            if hit is not None:
+                hit.take_damage(fireball.damage)
+                score += hit.points
+                if hit.is_dead():
+                    second_snowmen.remove(hit)
+                    Waves.waves[current_wave].alive -= 1
+                    fireballs.remove(fireball)
+
+            hit = fireball.hit_snowman(third_snowmen)
+            if hit is not None:
+                hit.take_damage(fireball.damage)
+                score += hit.points
+                if hit.is_dead():
+                    third_snowmen.remove(hit)
+                    Waves.waves[current_wave].alive -= 1
+                    fireballs.remove(fireball)
+
             if fireball.hit_boulder(boulders) is not None:
                 fireballs.remove(fireball)
             if fireball.is_out_of_bounds(WIDTH, HEIGHT):
@@ -182,25 +205,34 @@ def main():
             lost = True
             run = False
 
-        #luka change this for the waves
-        if score <= 200:
-            if random.random() < Snowman.FIRSTSNOWMAN_SPAWN_RATE:
-                first_snowmen.append(Snowman.spawn_firstsnowman(WIDTH, HEIGHT, campfire))
-        elif score <= 500:
-            Snowman.FIRSTSNOWMAN_SPAWN_RATE = 0.05
-            if random.random() < Snowman.FIRSTSNOWMAN_SPAWN_RATE and len(first_snowmen) + len(second_snowmen) < Snowman.TOTAL_SNOWMAN:
-                first_snowmen.append(Snowman.spawn_firstsnowman(WIDTH, HEIGHT, campfire))
-            if random.random() < Snowman.SECONDSNOWMAN_SPAWN_RATE and len(first_snowmen) + len(second_snowmen) < Snowman.TOTAL_SNOWMAN:
-                second_snowmen.append(Snowman.spawn_secondsnowman(WIDTH, HEIGHT, campfire))
-        elif score <= 800:
-            Snowman.FIRSTSNOWMAN_SPAWN_RATE = 0.025
-            Snowman.SECONDSNOWMAN_SPAWN_RATE = 0.05
-            if random.random() < Snowman.FIRSTSNOWMAN_SPAWN_RATE:
-                first_snowmen.append(Snowman.spawn_firstsnowman(WIDTH, HEIGHT, campfire))
-            if random.random() < Snowman.SECONDSNOWMAN_SPAWN_RATE:
-                second_snowmen.append(Snowman.spawn_secondsnowman(WIDTH, HEIGHT, campfire))
-            if random.random() < Snowman.THIRDSNOWMAN_SPAWN_RATE:
-                third_snowmen.append(Snowman.spawn_thirdsnowman(WIDTH, HEIGHT, campfire))
+        new_first, new_second, new_third = Waves.waves[current_wave].update(WIDTH, HEIGHT, campfire)
+        first_snowmen.extend(new_first)
+        second_snowmen.extend(new_second)
+        third_snowmen.extend(new_third)
+
+        if Waves.waves[current_wave].alive == 0:
+            current_wave += 1
+            if current_wave > len(Waves.waves):
+                if score <= 200:
+                    if random.random() < Snowman.FIRSTSNOWMAN_SPAWN_RATE:
+                        first_snowmen.append(Snowman.spawn_firstsnowman(WIDTH, HEIGHT, campfire))
+                elif score <= 500:
+                    Snowman.FIRSTSNOWMAN_SPAWN_RATE = 0.05
+                    if random.random() < Snowman.FIRSTSNOWMAN_SPAWN_RATE and len(first_snowmen) + len(
+                            second_snowmen) < Snowman.TOTAL_SNOWMAN:
+                        first_snowmen.append(Snowman.spawn_firstsnowman(WIDTH, HEIGHT, campfire))
+                    if random.random() < Snowman.SECONDSNOWMAN_SPAWN_RATE and len(first_snowmen) + len(
+                            second_snowmen) < Snowman.TOTAL_SNOWMAN:
+                        second_snowmen.append(Snowman.spawn_secondsnowman(WIDTH, HEIGHT, campfire))
+                elif score <= 800:
+                    Snowman.FIRSTSNOWMAN_SPAWN_RATE = 0.025
+                    Snowman.SECONDSNOWMAN_SPAWN_RATE = 0.05
+                    if random.random() < Snowman.FIRSTSNOWMAN_SPAWN_RATE:
+                        first_snowmen.append(Snowman.spawn_firstsnowman(WIDTH, HEIGHT, campfire))
+                    if random.random() < Snowman.SECONDSNOWMAN_SPAWN_RATE:
+                        second_snowmen.append(Snowman.spawn_secondsnowman(WIDTH, HEIGHT, campfire))
+                    if random.random() < Snowman.THIRDSNOWMAN_SPAWN_RATE:
+                        third_snowmen.append(Snowman.spawn_thirdsnowman(WIDTH, HEIGHT, campfire))
 
         for firstsnowman in first_snowmen:
             if firstsnowman.shoot():
