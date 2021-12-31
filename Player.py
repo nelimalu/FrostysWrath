@@ -177,7 +177,7 @@ class Player:
         if self.fireballs > 0:
             self.fireballs -= 1
             speed = 8
-            damage = 15
+            damage = 5
             self.shooting = True
             size = 5
             return Projectiles.Fireball(self.x, self.y, endpos, speed, damage, size)

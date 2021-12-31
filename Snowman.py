@@ -216,7 +216,7 @@ def spawn_firstsnowman(width, height, campfire):
 
 
 def spawn_secondsnowman(width, height, campfire):
-    health = 1
+    health = 7
     speed = 2
     damage = 3
     throwing_range = 200
@@ -225,7 +225,7 @@ def spawn_secondsnowman(width, height, campfire):
 
 
 def spawn_thirdsnowman(width, height, campfire):
-    health = 1
+    health = 12
     speed = 3
     damage = 6
     throwing_range = 200
