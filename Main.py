@@ -244,31 +244,31 @@ def main():
             lost = True
             run = False
 
-        new_first, new_second, new_third = Waves.waves[current_wave].update(WIDTH, HEIGHT, campfire)
-        first_snowmen.extend(new_first)
-        second_snowmen.extend(new_second)
-        third_snowmen.extend(new_third)
-
-        if current_wave >= len(Waves.waves) or Waves.waves[current_wave].alive == 0:
-            current_wave += 1
-            if current_wave >= len(Waves.waves):
-                if score <= 500:
-                    Snowman.FIRSTSNOWMAN_SPAWN_RATE = 0.05
-                    if random.random() < Snowman.FIRSTSNOWMAN_SPAWN_RATE and len(first_snowmen) + len(
-                            second_snowmen) < Snowman.TOTAL_SNOWMAN:
-                        first_snowmen.append(Snowman.spawn_firstsnowman(WIDTH, HEIGHT, campfire))
-                    if random.random() < Snowman.SECONDSNOWMAN_SPAWN_RATE and len(first_snowmen) + len(
-                            second_snowmen) < Snowman.TOTAL_SNOWMAN:
-                        second_snowmen.append(Snowman.spawn_secondsnowman(WIDTH, HEIGHT, campfire))
-                elif score <= 800:
-                    Snowman.FIRSTSNOWMAN_SPAWN_RATE = 0.025
-                    Snowman.SECONDSNOWMAN_SPAWN_RATE = 0.05
-                    if random.random() < Snowman.FIRSTSNOWMAN_SPAWN_RATE:
-                        first_snowmen.append(Snowman.spawn_firstsnowman(WIDTH, HEIGHT, campfire))
-                    if random.random() < Snowman.SECONDSNOWMAN_SPAWN_RATE:
-                        second_snowmen.append(Snowman.spawn_secondsnowman(WIDTH, HEIGHT, campfire))
-                    if random.random() < Snowman.THIRDSNOWMAN_SPAWN_RATE:
-                        third_snowmen.append(Snowman.spawn_thirdsnowman(WIDTH, HEIGHT, campfire))
+        if current_wave < len(Waves.waves):
+            new_first, new_second, new_third = Waves.waves[current_wave].update(WIDTH, HEIGHT, campfire)
+            first_snowmen.extend(new_first)
+            second_snowmen.extend(new_second)
+            third_snowmen.extend(new_third)
+            if Waves.waves[current_wave].alive == 0:
+                current_wave += 1
+        else:
+            if score <= 500:
+                Snowman.FIRSTSNOWMAN_SPAWN_RATE = 0.05
+                if random.random() < Snowman.FIRSTSNOWMAN_SPAWN_RATE and len(first_snowmen) + len(
+                        second_snowmen) < Snowman.TOTAL_SNOWMAN:
+                    first_snowmen.append(Snowman.spawn_firstsnowman(WIDTH, HEIGHT, campfire))
+                if random.random() < Snowman.SECONDSNOWMAN_SPAWN_RATE and len(first_snowmen) + len(
+                        second_snowmen) < Snowman.TOTAL_SNOWMAN:
+                    second_snowmen.append(Snowman.spawn_secondsnowman(WIDTH, HEIGHT, campfire))
+            elif score <= 800:
+                Snowman.FIRSTSNOWMAN_SPAWN_RATE = 0.025
+                Snowman.SECONDSNOWMAN_SPAWN_RATE = 0.05
+                if random.random() < Snowman.FIRSTSNOWMAN_SPAWN_RATE:
+                    first_snowmen.append(Snowman.spawn_firstsnowman(WIDTH, HEIGHT, campfire))
+                if random.random() < Snowman.SECONDSNOWMAN_SPAWN_RATE:
+                    second_snowmen.append(Snowman.spawn_secondsnowman(WIDTH, HEIGHT, campfire))
+                if random.random() < Snowman.THIRDSNOWMAN_SPAWN_RATE:
+                    third_snowmen.append(Snowman.spawn_thirdsnowman(WIDTH, HEIGHT, campfire))
 
         for firstsnowman in first_snowmen:
             if firstsnowman.shoot():
