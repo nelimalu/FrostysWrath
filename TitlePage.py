@@ -75,7 +75,7 @@ def update(win, buttons, background, trees, campfires, animation_step, outerslot
 def play(win, background, trees, campfires, outersloth):
     global run
 
-    buttons = [Button(win, 400, "P LAY", 80, 'Snowby.ttf', cont)]
+    buttons = [Button(win, 400, "PLAY", 80, 'Typewriter.ttf', cont)]
     animation_step = 0
     frame = 0
 

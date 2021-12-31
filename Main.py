@@ -78,7 +78,6 @@ def update(player, fireballs, snowballs, campfire, first_snowmen, boulders, keys
                 if campfire.health > 100:
                     campfire.health = 100
 
-
     for fireball in fireballs:
         fireball.draw(win, FIREBALL)
     for snowball in snowballs:
@@ -121,7 +120,7 @@ def main():
 
     run = True
     while run:
-        clock.tick(60)
+        # clock.tick(60)
 
         keys = pygame.key.get_pressed()
         mousepos = pygame.mouse.get_pos()
@@ -182,7 +181,6 @@ def main():
                 campfire.health -= firstsnowman.damage
                 first_snowmen.remove(firstsnowman)
             firstsnowman.move(campfire)
-
 
         campfire.spawn_wood()
 

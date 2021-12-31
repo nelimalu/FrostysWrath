@@ -4,14 +4,23 @@ import math
 import Helper
 import Projectiles
 import time
-import Campfire
+from pathfinding.core.diagonal_movement import DiagonalMovement
+from pathfinding.core.grid import Grid
+from pathfinding.finder.a_star import AStarFinder
 
 # update
 FIRSTSNOWMAN_SPAWN_RATE = 0.01
-SECONDSNOWMAN_SPAWN_RATE = 0.01
-THIRDSNOWMAN_SPAWN_RATE = 0.01
+SECONDSNOWMAN_SPAWN_RATE = 0.008
+THIRDSNOWMAN_SPAWN_RATE = 0.005
 BORDER = (0, 0, 1100, 650)
 SAFE_DISTANCE = 30
+
+MATRIX = [[0 for m in range(BORDER[3])] for n in range(BORDER[2])]
+
+
+def pathfind():
+    pass
+
 
 class Snowman:
     COOLDOWN = 1
@@ -69,7 +78,7 @@ class first_snowman(Snowman):
                 self.reached_goal = True
 
     def draw(self, win, firstsnowman):
-        if self.x >= 150 and self.x <= 900 and (self.y < 250 or self.y > 400):
+        if 150 <= self.x <= 900 and (self.y < 250 or self.y > 400):
             if self.y <= 325:
                 win.blit(firstsnowman[1], (self.x - self.WIDTH // 2-30, self.y - self.HEIGHT))
             else:
@@ -79,7 +88,7 @@ class first_snowman(Snowman):
                 win.blit(firstsnowman[2], (self.x - self.WIDTH // 2-30, self.y - self.HEIGHT))
             else:
                 win.blit(firstsnowman[3], (self.x - self.WIDTH // 2-30, self.y - self.HEIGHT))
-        pygame.draw.rect(win, (0, 0, 0), (self.x - self.WIDTH // 2, self.y - self.HEIGHT // 2, self.WIDTH, self.HEIGHT))
+        # pygame.draw.rect(win, (0, 0, 0), (self.x - self.WIDTH // 2, self.y - self.HEIGHT // 2, self.WIDTH, self.HEIGHT))
 
 
 class second_snowman(Snowman):
