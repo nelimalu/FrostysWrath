@@ -270,8 +270,9 @@ def main():
                         second_snowmen) < Snowman.TOTAL_SNOWMAN:
                     second_snowmen.append(Snowman.spawn_secondsnowman(WIDTH, HEIGHT, campfire))
             else:
-                Snowman.FIRSTSNOWMAN_SPAWN_RATE = 0.025
-                Snowman.SECONDSNOWMAN_SPAWN_RATE = 0.05
+                Snowman.FIRSTSNOWMAN_SPAWN_RATE = 0.05
+                Snowman.SECONDSNOWMAN_SPAWN_RATE = 0.025
+                Snowman.THIRDSNOWMAN_SPAWN_RATE = 0.01
                 if random.random() < Snowman.FIRSTSNOWMAN_SPAWN_RATE:
                     first_snowmen.append(Snowman.spawn_firstsnowman(WIDTH, HEIGHT, campfire))
                 if random.random() < Snowman.SECONDSNOWMAN_SPAWN_RATE:
