@@ -249,6 +249,7 @@ def main():
             if firstsnowman.shoot():
                 campfire.health -= firstsnowman.damage
                 first_snowmen.remove(firstsnowman)
+                Waves.waves[current_wave].alive -= 1
             firstsnowman.move(campfire, boulders)
 
         for secondsnowman in second_snowmen:
