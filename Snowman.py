@@ -174,6 +174,35 @@ class third_snowman(Snowman):
         self.WIDTH = 60
         self.HEIGHT = 120
 
+    def move(self, campfire, boulders):
+        x = [self.x][:][0]
+        y = [self.y][:][0]
+
+        if not self.reached_goal:
+            x = self.x + math.sin(self.angle) * self.speed
+            y = self.y + math.cos(self.angle) * self.speed
+            if Helper.get_distance(self.x, self.y, campfire.x, campfire.y) <= campfire.FIRE_DISTANCE:
+                self.reached_goal = True
+
+        move_x = True
+        move_y = True
+
+        rect = pygame.Rect(x, y, self.WIDTH, self.HEIGHT)
+        for boulder in boulders:
+            boulder_rect = pygame.Rect((boulder.x - 4, boulder.y - 4, boulder.width + 12, boulder.height + 12))
+            if boulder_rect.colliderect(rect):
+                if rect.bottom <= boulder_rect.top - 8 or rect.top >= boulder_rect.bottom - 4:
+                    move_y = False
+                    self.angle = Helper.find_angle(self.x, self.y, self.goal.x, self.goal.y)
+                elif rect.left >= boulder_rect.right - 4 or rect.right <= boulder_rect.left + 4:
+                    move_x = False
+                    self.angle = Helper.find_angle(self.x, self.y, self.goal.x, self.goal.y)
+
+        if move_x:
+            self.x = x
+        if move_y:
+            self.y = y
+
     def draw(self, win, thirdsnowman, thirdsnowmanshooting):
         self.frame += 1
 
@@ -235,8 +264,8 @@ def spawn_secondsnowman(width, height, campfire):
 
 
 def spawn_thirdsnowman(width, height, campfire):
-    health = 12
-    speed = 3
+    health = 100
+    speed = 2
     damage = 6
     throwing_range = 200
     points = 15

@@ -238,7 +238,7 @@ def main():
 
         if Waves.waves[current_wave].alive == 0:
             current_wave += 1
-            if current_wave > len(Waves.waves):
+            if current_wave >= len(Waves.waves):
                 if score <= 500:
                     Snowman.FIRSTSNOWMAN_SPAWN_RATE = 0.05
                     if random.random() < Snowman.FIRSTSNOWMAN_SPAWN_RATE and len(first_snowmen) + len(
