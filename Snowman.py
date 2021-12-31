@@ -181,7 +181,7 @@ class third_snowman(Snowman):
         if not self.reached_goal:
             x = self.x + math.sin(self.angle) * self.speed
             y = self.y + math.cos(self.angle) * self.speed
-            if Helper.get_distance(self.x, self.y, campfire.x, campfire.y) <= campfire.FIRE_DISTANCE:
+            if Helper.get_distance(self.x, self.y, campfire.x, campfire.y) <= campfire.FIRE_DISTANCE * 2:
                 self.reached_goal = True
 
         move_x = True
@@ -232,7 +232,6 @@ class third_snowman(Snowman):
                 else:
                     win.blit(thirdsnowman[3], (self.x - self.WIDTH // 2 - 70, self.y - self.HEIGHT))
         #pygame.draw.rect(win, (0, 0, 0), (self.x - self.WIDTH // 2, self.y - self.HEIGHT // 2, self.WIDTH, self.HEIGHT))
-
 
 
 def get_snowman_location(width, height, border):
